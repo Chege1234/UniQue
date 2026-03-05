@@ -76,10 +76,10 @@ export default function StaffDashboard() {
   const { data: departments = [] } = useQuery({
     queryKey: ['departments'],
     queryFn: () => base44.entities.Department.list(),
-    enabled: !!user && user.role === 'admin'
+    enabled: !!user
   });
 
-  const activeDepartment = user?.role === 'admin' ? selectedDepartment : user?.department;
+  const activeDepartment = selectedDepartment || user?.department;
 
   const { data: allTickets = [] } = useQuery({
     queryKey: ['allTickets', activeDepartment],
@@ -249,37 +249,40 @@ export default function StaffDashboard() {
           <h1 className="text-4xl font-extrabold text-white tracking-tight">
             Staff <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">Terminal</span>
           </h1>
-          {user.role === 'admin' ? (
-            <div className="mt-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <div className="mt-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            {user.role === 'admin' && (
               <Badge className="bg-purple-500/20 text-purple-300 border border-purple-500/30 text-xs font-bold uppercase tracking-widest px-3 py-1 backdrop-blur-md">
                 👑 Authority Override
               </Badge>
-              <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-2xl p-1 pr-4">
-                <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center">
-                  <Building2 className="w-5 h-5 text-purple-400" />
-                </div>
-                <Select value={selectedDepartment || ""} onValueChange={setSelectedDepartment}>
-                  <SelectTrigger className="w-full sm:w-64 bg-transparent border-none text-white font-bold h-10 focus:ring-0">
-                    <SelectValue placeholder="Network Node..." />
-                  </SelectTrigger>
-                  <SelectContent className="glass-card border-white/10 text-white">
-                    {departments.map(dept => (
-                      <SelectItem key={dept.id} value={dept.name} className="hover:bg-white/5 cursor-pointer">
-                        {dept.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+            )}
+            <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-2xl p-1 pr-4">
+              <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center">
+                <Building2 className="w-5 h-5 text-purple-400" />
               </div>
+              <Select value={selectedDepartment || ""} onValueChange={setSelectedDepartment}>
+                <SelectTrigger className="w-full sm:w-64 bg-transparent border-none text-white font-bold h-10 focus:ring-0">
+                  <SelectValue placeholder="Network Node..." />
+                </SelectTrigger>
+                <SelectContent className="glass-card border-white/10 text-white">
+                  {departments.map(dept => (
+                    <SelectItem key={dept.id} value={dept.name} className="hover:bg-white/5 cursor-pointer">
+                      {dept.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-          ) : (
-            <div className="mt-3 flex items-center gap-2">
-              <span className="text-blue-200/50 font-medium tracking-wide">Managing Node:</span>
-              <Badge className="bg-blue-500/20 text-blue-400 border border-blue-500/30 font-black tracking-widest uppercase py-1">
-                {user.department}
-              </Badge>
-            </div>
-          )}
+            {user.role !== 'admin' && user.department && user.department !== selectedDepartment && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-[10px] text-blue-400 font-black uppercase tracking-widest hover:bg-white/5"
+                onClick={() => setSelectedDepartment(user.department)}
+              >
+                Reset to {user.department}
+              </Button>
+            )}
+          </div>
         </motion.div>
       </div>
 

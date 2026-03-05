@@ -18,7 +18,7 @@ import {
   Ticket as TicketIcon,
   Bell
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 
 export default function StudentTicketView() {
@@ -125,8 +125,8 @@ export default function StudentTicketView() {
   // Monitor status changes and trigger notification
   useEffect(() => {
     if (activeTicket) {
-      // Check if status changed to in_progress
-      if (previousStatusRef.current === 'waiting' && activeTicket.status === 'in_progress' && !notificationShownRef.current) {
+      // Check if status changed to in_progress or called
+      if (previousStatusRef.current === 'waiting' && (activeTicket.status === 'in_progress' || activeTicket.status === 'called') && !notificationShownRef.current) {
         // Play sound
         if (audioRef.current) {
           try {
@@ -216,6 +216,84 @@ export default function StudentTicketView() {
 
   return (
     <div className="min-h-screen relative z-10 px-4 py-12 md:py-20">
+      <AnimatePresence>
+        {(activeTicket?.status === 'in_progress' || activeTicket?.status === 'called') && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-[#030014]/95 backdrop-blur-3xl px-4"
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+              className="text-center"
+            >
+              <motion.div
+                animate={{
+                  scale: [1, 1.1, 1],
+                  filter: ["drop-shadow(0 0 20px rgba(168, 85, 247, 0.4))", "drop-shadow(0 0 50px rgba(168, 85, 247, 0.8))", "drop-shadow(0 0 20px rgba(168, 85, 247, 0.4))"]
+                }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="w-32 h-32 sm:w-48 sm:h-48 bg-gradient-to-br from-purple-600 to-blue-600 rounded-[40px] flex items-center justify-center mx-auto mb-10 shadow-2xl relative"
+              >
+                <TicketIcon className="w-16 h-16 sm:w-24 sm:h-24 text-white" />
+                <div className="absolute inset-0 bg-white/20 rounded-[40px] animate-ping opacity-20" />
+              </motion.div>
+
+              <motion.h1
+                animate={{ opacity: [1, 0.5, 1] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+                className="text-5xl sm:text-8xl font-black text-white tracking-tighter mb-8 uppercase italic"
+              >
+                PROCEED TO <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400 drop-shadow-[0_0_30px_rgba(168,85,247,0.5)]">COUNTER</span>
+              </motion.h1>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="inline-flex items-center gap-8 px-10 py-6 bg-white/5 border border-white/10 rounded-[30px] backdrop-blur-md"
+              >
+                <div className="text-left">
+                  <p className="text-[10px] font-black text-purple-400 uppercase tracking-[0.3em] mb-2">Identification Key</p>
+                  <p className="text-4xl font-black text-white tracking-widest">{activeTicket.ticket_number}</p>
+                </div>
+                <div className="w-px h-12 bg-white/10" />
+                <div className="text-left">
+                  <p className="text-[10px] font-black text-blue-400 uppercase tracking-[0.3em] mb-2">Engaged Terminal</p>
+                  <p className="text-4xl font-black text-white truncate max-w-[250px] uppercase">{activeTicket.department_name}</p>
+                </div>
+              </motion.div>
+
+              <div className="mt-16">
+                <Button
+                  variant="ghost"
+                  onClick={() => navigate(createPageUrl("Home"))}
+                  className="text-blue-100/30 hover:text-white font-black uppercase tracking-[0.4em] text-[10px] transition-all hover:bg-white/5 px-8 h-12 rounded-full"
+                >
+                  TERMINATE NOTIFICATION
+                </Button>
+              </div>
+            </motion.div>
+
+            {/* Immersive Background Effects */}
+            <div className="absolute inset-0 z-[-1] overflow-hidden">
+              <motion.div
+                animate={{
+                  scale: [1, 1.5, 1],
+                  opacity: [0.3, 0.6, 0.3],
+                }}
+                transition={{ duration: 8, repeat: Infinity }}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-purple-600/20 rounded-full blur-[150px]"
+              />
+              <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay" />
+            </div>
+          </motion.div>
+        )}
+
+      </AnimatePresence>
       <div className="max-w-4xl mx-auto space-y-12">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
           <div>
