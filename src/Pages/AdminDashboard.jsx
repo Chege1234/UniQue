@@ -114,8 +114,8 @@ export default function AdminDashboard() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+      <div className="flex items-center justify-center min-h-[50vh] relative z-10">
+        <Loader2 className="h-10 w-10 animate-spin text-purple-500" />
       </div>
     );
   }
@@ -125,30 +125,33 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div className="space-y-12 relative z-10">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-          <p className="text-gray-600 mt-1">Manage system configuration and monitor performance</p>
+          <h1 className="text-5xl font-black text-white tracking-tight uppercase">Central <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Command</span></h1>
+          <p className="text-blue-100/30 font-medium text-lg mt-3 uppercase tracking-widest">System architecture and performance monitoring</p>
         </div>
-        <div className="flex gap-3">
-          <Link to={createPageUrl("StaffDashboard")}>
-            <Button variant="outline" className="border-blue-500 text-blue-600 hover:bg-blue-50">
-              <Users className="w-4 h-4 mr-2" />
-              Preview Staff Dashboard
-            </Button>
-          </Link>
-          <Link to={createPageUrl("Analytics")}>
-            <Button className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700">
-              <BarChart3 className="w-4 h-4 mr-2" />
-              View Analytics
-            </Button>
-          </Link>
+        <div className="flex gap-4">
+          <Button
+            variant="ghost"
+            onClick={() => navigate(createPageUrl("StaffDashboard"))}
+            className="text-blue-100/40 hover:text-white hover:bg-white/5 font-black uppercase tracking-[0.3em] text-[10px] rounded-2xl px-6 h-14 transition-all"
+          >
+            <Users className="w-4 h-4 mr-3" />
+            STAFF PERSPECTIVE
+          </Button>
+          <Button
+            onClick={() => navigate(createPageUrl("Analytics"))}
+            className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-black uppercase tracking-[0.3em] text-[10px] rounded-2xl px-8 h-14 shadow-2xl shadow-purple-900/40 transition-all"
+          >
+            <BarChart3 className="w-4 h-4 mr-3" />
+            ANALYTICS ENGINE
+          </Button>
         </div>
       </div>
 
-      {/* Stats */}
-      <div className="grid md:grid-cols-4 gap-6">
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => (
           <motion.div
             key={stat.title}
@@ -156,38 +159,57 @@ export default function AdminDashboard() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
           >
-            <Card className="border-none shadow-lg">
-              <CardContent className="p-6">
+            <Card className="glass-card border-none overflow-hidden relative group">
+              <CardContent className="p-8">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600 mb-1">{stat.title}</p>
-                    <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+                    <p className="text-[10px] font-black text-blue-400 uppercase tracking-[0.3em] mb-3">{stat.title}</p>
+                    <p className="text-4xl font-black text-white tracking-tighter">{stat.value}</p>
                   </div>
-                  <div className={`w-12 h-12 ${stat.bgColor} rounded-xl flex items-center justify-center`}>
-                    <stat.icon className={`w-6 h-6 ${stat.color}`} />
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center bg-white/5 border border-white/10 group-hover:scale-110 transition-transform duration-500`}>
+                    <stat.icon className={`w-6 h-6 text-purple-400`} />
                   </div>
                 </div>
+                {/* Subtle bottom gradient indicator */}
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-purple-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </CardContent>
             </Card>
           </motion.div>
         ))}
       </div>
 
-      {/* Staff Access Requests - Show if there are pending requests */}
-      {pendingRequests.length > 0 && (
-        <StaffRequestManager requests={staffRequests} />
-      )}
+      <div className="grid grid-cols-1 gap-12">
+        {/* Staff Access Requests */}
+        {pendingRequests.length > 0 && (
+          <div className="space-y-6">
+            <div className="flex items-center gap-4 ml-1">
+              <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
+              <h2 className="text-[10px] font-black text-red-400 uppercase tracking-[0.4em]">Pending Authorizations</h2>
+            </div>
+            <StaffRequestManager requests={staffRequests} />
+          </div>
+        )}
 
-      {/* Department Management */}
-      <DepartmentManager departments={departments} />
+        {/* Department Management */}
+        <div className="space-y-6">
+          <h2 className="text-[10px] font-black text-blue-400 uppercase tracking-[0.4em] ml-1">Node Configuration</h2>
+          <DepartmentManager departments={departments} />
+        </div>
 
-      {/* System Stats */}
-      <SystemStats tickets={allTickets} departments={departments} />
+        {/* System Stats */}
+        <div className="space-y-6">
+          <h2 className="text-[10px] font-black text-blue-400 uppercase tracking-[0.4em] ml-1">Telemetric insights</h2>
+          <SystemStats tickets={allTickets} departments={departments} />
+        </div>
 
-      {/* All Staff Requests - Collapsible */}
-      {staffRequests.length > 0 && pendingRequests.length === 0 && (
-        <StaffRequestManager requests={staffRequests} />
-      )}
+        {/* All Staff Requests - Collapsible / History */}
+        {staffRequests.length > 0 && pendingRequests.length === 0 && (
+          <div className="space-y-6 opacity-60 hover:opacity-100 transition-opacity">
+            <h2 className="text-[10px] font-black text-blue-100/30 uppercase tracking-[0.4em] ml-1">Clearance Logs</h2>
+            <StaffRequestManager requests={staffRequests} />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

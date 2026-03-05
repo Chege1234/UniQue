@@ -163,60 +163,48 @@ export default function StudentTicketView() {
 
   const getStatusBadge = (status) => {
     if (status === 'in_progress' || status === 'called') {
-      return <Badge className="bg-orange-500 text-lg px-4 py-1">🔔 NOW SERVING</Badge>;
+      return <Badge className="bg-green-500/20 text-green-400 border border-green-500/30 font-black tracking-widest uppercase px-6 py-2 rounded-full text-xs">ENGAGED</Badge>;
     }
     if (status === 'waiting') {
-      return <Badge className="bg-blue-500 text-lg px-4 py-1">⏳ Waiting</Badge>;
+      return <Badge className="bg-blue-500/20 text-blue-400 border border-blue-500/30 font-black tracking-widest uppercase px-6 py-2 rounded-full text-xs">BUFFERING</Badge>;
     }
     if (status === 'completed') {
-      return <Badge className="bg-green-500 text-lg px-4 py-1">✓ Completed</Badge>;
+      return <Badge className="bg-purple-500/20 text-purple-400 border border-purple-500/30 font-black tracking-widest uppercase px-6 py-2 rounded-full text-xs">RESOLVED</Badge>;
     }
-    return <Badge variant="secondary" className="text-lg px-4 py-1">Cancelled</Badge>;
+    return <Badge className="bg-white/5 text-blue-100/30 border border-white/5 font-black tracking-widest uppercase px-6 py-2 rounded-full text-xs">ABORTED</Badge>;
   };
 
   if (!activeTicket && completedTickets.length === 0) {
     return (
-      <div className="min-h-screen relative flex items-center justify-center p-4">
-        {/* Background Image with Overlay */}
-        <div
-          className="fixed inset-0 z-0"
-          style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2070)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            backgroundAttachment: 'fixed'
-          }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/90 via-slate-900/85 to-blue-800/90"></div>
-        </div>
-
+      <div className="flex items-center justify-center min-h-[70vh] px-4 relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-md relative z-10"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="w-full max-w-lg"
         >
-          <Card className="text-center shadow-2xl">
-            <CardContent className="p-8 sm:p-12">
-              <AlertCircle className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 mx-auto mb-4" />
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">No Tickets Found</h2>
-              <p className="text-sm sm:text-base text-gray-600 mb-6">
-                Student {studentNumber} has no active or recent tickets.
+          <Card className="glass-card border-none p-12 text-center">
+            <CardContent className="p-0">
+              <div className="w-20 h-20 bg-white/5 border border-white/10 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl">
+                <AlertCircle className="w-10 h-10 text-blue-100/20" />
+              </div>
+              <h2 className="text-3xl font-black text-white tracking-tight mb-4 uppercase">No Session Found</h2>
+              <p className="text-blue-100/40 font-medium text-lg leading-relaxed mb-10">
+                Identification key {studentNumber} has no active cycles or recent terminations.
               </p>
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-4">
                 <Button
                   onClick={() => navigate(createPageUrl("StudentTakeTicket") + `?student=${studentNumber}`)}
-                  className="w-full bg-blue-500 hover:bg-blue-600 h-11 sm:h-12"
+                  className="w-full h-16 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-black uppercase tracking-[0.3em] text-sm rounded-2xl shadow-2xl shadow-purple-500/20 transition-all active:scale-[0.98]"
                 >
-                  Take a New Ticket
+                  INITIALIZE NEW SESSION
                 </Button>
                 <Button
-                  variant="outline"
+                  variant="ghost"
                   onClick={() => navigate(createPageUrl("StudentEntry"))}
-                  className="w-full h-11 sm:h-12"
+                  className="w-full h-16 text-blue-100/30 hover:text-white hover:bg-white/5 font-black uppercase tracking-[0.3em] text-[10px] rounded-2xl transition-all"
                 >
-                  <Home className="w-4 h-4 mr-2" />
-                  Back to Home
+                  <Home className="w-4 h-4 mr-3" />
+                  RETURN TO BASE
                 </Button>
               </div>
             </CardContent>
@@ -227,61 +215,49 @@ export default function StudentTicketView() {
   }
 
   return (
-    <div className="min-h-screen relative p-4 sm:p-6 md:p-8">
-      {/* Background Image with Overlay */}
-      <div
-        className="fixed inset-0 z-0"
-        style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2070)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          backgroundAttachment: 'fixed'
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/90 via-slate-900/85 to-blue-800/90"></div>
-      </div>
-
-      <div className="max-w-2xl mx-auto space-y-4 sm:space-y-6 relative z-10">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0">
+    <div className="min-h-screen relative z-10 px-4 py-12 md:py-20">
+      <div className="max-w-4xl mx-auto space-y-12">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
           <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-white">My Ticket</h1>
-            <p className="text-sm sm:text-base text-blue-100">Student: {studentNumber}</p>
+            <h1 className="text-5xl font-black text-white tracking-tight uppercase">Session <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">Status</span></h1>
+            <p className="text-blue-100/40 font-bold uppercase tracking-[0.25em] text-sm mt-3 flex items-center gap-3">
+              <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_10px_#22c55e]" />
+              Authenticated Node: {studentNumber}
+            </p>
           </div>
-          <div className="flex gap-2 w-full sm:w-auto">
+          <div className="flex gap-4">
             <Button
               variant="outline"
               size="icon"
               onClick={() => refetch()}
-              title="Refresh"
-              className="flex-shrink-0 bg-white/95"
+              className="bg-white/5 border-white/10 hover:bg-white/10 text-white w-14 h-14 rounded-2xl transition-all active:scale-90"
             >
-              <RefreshCw className="w-4 h-4" />
+              <RefreshCw className="w-6 h-6" />
             </Button>
             <Button
               variant="outline"
               onClick={() => navigate(createPageUrl("StudentEntry"))}
-              className="flex-1 sm:flex-initial bg-white/95"
+              className="bg-white/5 border-white/10 hover:bg-white/10 text-white h-14 px-8 rounded-2xl font-black uppercase tracking-widest text-xs"
             >
-              <Home className="w-4 h-4 mr-2" />
-              Home
+              <Home className="w-4 h-4 mr-3" />
+              RETURN
             </Button>
           </div>
         </div>
 
         {/* Notification Permission Alert */}
         {activeTicket && 'Notification' in window && Notification.permission === 'default' && (
-          <Alert className="bg-yellow-50 border-yellow-300">
-            <Bell className="h-5 w-5 text-yellow-600" />
-            <AlertDescription className="text-yellow-800">
-              <strong>Enable notifications</strong> to get alerted when it's your turn!
+          <Alert className="bg-purple-500/10 border-purple-500/20 rounded-3xl p-6">
+            <Bell className="h-6 w-6 text-purple-400" />
+            <AlertDescription className="text-purple-300 ml-4 font-bold uppercase tracking-wider text-xs flex items-center justify-between w-full">
+              <span>Enable neural alerts for live engagement updates.</span>
               <Button
                 size="sm"
-                variant="outline"
-                className="ml-2"
+                variant="ghost"
+                className="hover:bg-purple-500/20 text-purple-400 font-black uppercase tracking-widest text-[10px]"
                 onClick={() => Notification.requestPermission()}
               >
-                Enable
+                AUTHORIZE
               </Button>
             </AlertDescription>
           </Alert>
@@ -292,82 +268,77 @@ export default function StudentTicketView() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
           >
-            <Card className={`border-none shadow-2xl ${(activeTicket.status === 'in_progress' || activeTicket.status === 'called')
-              ? 'bg-gradient-to-br from-orange-50 to-orange-100 border-4 border-orange-400 animate-pulse'
-              : 'bg-white/95 backdrop-blur-sm'
-              }`}>
-              <CardHeader className="p-4 sm:p-6">
-                <div className="flex flex-col sm:flex-row justify-between items-start gap-3">
-                  <div className="flex-1">
-                    <CardTitle className="text-2xl sm:text-3xl mb-2">{activeTicket.department_name}</CardTitle>
-                    <p className="text-xs sm:text-sm text-gray-600">
-                      Created {format(new Date(activeTicket.created_date), 'h:mm a')}
+            <Card className="glass-card border-none overflow-hidden relative group">
+              {(activeTicket.status === 'in_progress' || activeTicket.status === 'called') && (
+                <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent animate-pulse" />
+              )}
+              <CardHeader className="p-10 border-b border-white/5">
+                <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
+                  <div className="text-center sm:text-left">
+                    <p className="text-[10px] font-black text-blue-400 uppercase tracking-[0.3em] mb-2">Processing Node</p>
+                    <CardTitle className="text-4xl font-black text-white tracking-tight uppercase leading-none">{activeTicket.department_name}</CardTitle>
+                    <p className="text-[10px] font-bold text-blue-100/30 uppercase tracking-[0.2em] mt-3">
+                      INITIATED {format(new Date(activeTicket.created_date), 'h:mm a')}
                     </p>
                   </div>
-                  <div className="w-full sm:w-auto">
-                    {getStatusBadge(activeTicket.status)}
-                  </div>
+                  {getStatusBadge(activeTicket.status)}
                 </div>
               </CardHeader>
-              <CardContent className="p-4 sm:p-6">
-                <div className="space-y-4 sm:space-y-6">
+              <CardContent className="p-10">
+                <div className="space-y-10">
                   {/* Ticket Number */}
-                  <div className="p-6 sm:p-8 bg-white rounded-2xl text-center shadow-lg">
-                    <p className="text-xs sm:text-sm text-gray-600 mb-2">Your Ticket Number</p>
-                    <p className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 tracking-wider font-mono break-all">
+                  <div className="p-12 bg-white/5 rounded-[40px] text-center border border-white/10 shadow-inner group-hover:border-purple-500/30 transition-colors">
+                    <p className="text-[10px] font-black text-blue-100/20 uppercase tracking-[0.4em] mb-6">Identification Key</p>
+                    <p className="text-8xl font-black text-white tracking-widest leading-none bg-clip-text bg-gradient-to-b from-white to-white/60">
                       {activeTicket.ticket_number}
                     </p>
                   </div>
 
                   {/* Stats Grid */}
-                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                    <div className="p-4 sm:p-6 bg-white rounded-xl shadow-md">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Users className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 flex-shrink-0" />
-                        <span className="text-xs sm:text-sm text-gray-600">Queue Position</span>
-                      </div>
-                      <p className="text-3xl sm:text-4xl font-bold text-gray-900">
-                        #{activeTicket.queue_position || 1}
-                      </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                    <div className="p-8 bg-white/5 rounded-3xl border border-white/5 flex flex-col items-center">
+                      <Users className="w-8 h-8 text-purple-400 mb-3 opacity-30" />
+                      <span className="text-[10px] font-black text-blue-100/20 uppercase tracking-widest mb-2">Queue Index</span>
+                      <p className="text-4xl font-black text-white tracking-tighter">#{activeTicket.queue_position || 1}</p>
                     </div>
-                    <div className="p-4 sm:p-6 bg-white rounded-xl shadow-md">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 flex-shrink-0" />
-                        <span className="text-xs sm:text-sm text-gray-600">Est. Wait</span>
-                      </div>
-                      <p className="text-3xl sm:text-4xl font-bold text-gray-900">
-                        {activeTicket.estimated_wait_time || 15}
-                        <span className="text-lg sm:text-xl">m</span>
+                    <div className="p-8 bg-white/5 rounded-3xl border border-white/5 flex flex-col items-center">
+                      <Clock className="w-8 h-8 text-blue-400 mb-3 opacity-30" />
+                      <span className="text-[10px] font-black text-blue-100/20 uppercase tracking-widest mb-2">Est. Latency</span>
+                      <p className="text-4xl font-black text-white tracking-tighter">
+                        {activeTicket.estimated_wait_time || 15}<span className="text-sm ml-1 text-blue-400">m</span>
                       </p>
                     </div>
                   </div>
 
                   {(activeTicket.status === 'in_progress' || activeTicket.status === 'called') && (
-                    <Alert className="border-orange-400 bg-orange-50">
-                      <CheckCircle2 className="h-5 w-5 text-orange-600 flex-shrink-0" />
-                      <AlertDescription className="text-orange-800 font-semibold text-sm sm:text-base md:text-lg">
-                        🎉 It's your turn! Please proceed to the service counter now.
-                      </AlertDescription>
-                    </Alert>
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="p-10 bg-green-500/20 border border-green-500/30 rounded-[40px] text-center backdrop-blur-md"
+                    >
+                      <CheckCircle2 className="w-12 h-12 text-green-400 mx-auto mb-4" />
+                      <p className="text-2xl font-black text-green-300 tracking-tight leading-tight uppercase">
+                        ACTIVE ENGAGEMENT<br />
+                        <span className="text-[10px] font-bold text-green-400/60 tracking-[0.3em] opacity-80">Proceed to Designated Terminal</span>
+                      </p>
+                    </motion.div>
                   )}
 
-                  <div className="flex flex-col sm:flex-row gap-3">
+                  <div className="flex flex-col sm:flex-row gap-6 pt-4">
                     <Button
-                      variant="outline"
-                      className="flex-1 h-11 sm:h-12"
+                      variant="ghost"
+                      className="flex-1 h-16 text-blue-100/20 hover:text-red-400 hover:bg-red-500/10 font-black uppercase tracking-[0.3em] text-[10px] rounded-2xl transition-all"
                       onClick={() => navigate(createPageUrl("StudentEntry"))}
                     >
-                      <Home className="w-4 h-4 mr-2" />
-                      Back to Home
+                      ABORT MONITORING
                     </Button>
                     <Button
-                      variant="destructive"
-                      className="flex-1 h-11 sm:h-12"
+                      className="flex-[2] bg-white/5 hover:bg-red-500/10 border border-white/10 hover:border-red-500/20 text-white hover:text-red-400 h-16 px-8 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all"
                       onClick={() => cancelMutation.mutate(activeTicket.id)}
                       disabled={cancelMutation.isPending}
                     >
-                      <XCircle className="w-4 h-4 mr-2" />
-                      Cancel Ticket
+                      <XCircle className="w-4 h-4 mr-3" />
+                      TERMINATE SESSION
                     </Button>
                   </div>
                 </div>
@@ -378,30 +349,34 @@ export default function StudentTicketView() {
 
         {/* Recent History */}
         {completedTickets.length > 0 && (
-          <Card className="border-none shadow-lg bg-white/95 backdrop-blur-sm">
-            <CardHeader className="p-4 sm:p-6">
-              <CardTitle className="text-lg sm:text-xl">Recent History</CardTitle>
+          <Card className="glass-card border-none overflow-hidden relative group">
+            <CardHeader className="p-8 border-b border-white/5">
+              <CardTitle className="text-lg font-black text-white uppercase tracking-widest">Historical Log</CardTitle>
             </CardHeader>
-            <CardContent className="p-4 sm:p-6">
-              <div className="space-y-3">
-                {completedTickets.slice(0, 3).map((ticket) => (
-                  <div key={ticket.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-4 bg-gray-50 rounded-lg gap-3">
-                    <div className="flex items-center gap-3 flex-1 min-w-0">
-                      {ticket.status === 'completed' ? (
-                        <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />
-                      ) : (
-                        <XCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
-                      )}
-                      <div className="min-w-0 flex-1">
-                        <p className="font-medium text-gray-900 text-sm sm:text-base truncate">{ticket.department_name}</p>
-                        <p className="text-xs sm:text-sm text-gray-600">
+            <CardContent className="p-8">
+              <div className="space-y-4">
+                {completedTickets.slice(0, 5).map((ticket) => (
+                  <div key={ticket.id} className="flex items-center justify-between p-6 bg-white/5 hover:bg-white/10 transition-colors rounded-2xl border border-white/5 group">
+                    <div className="flex items-center gap-6">
+                      <div className={`w-12 h-12 rounded-xl border flex items-center justify-center ${ticket.status === 'completed' ? 'bg-green-500/10 border-green-500/20 text-green-400' : 'bg-red-500/10 border-red-500/20 text-red-400'}`}>
+                        {ticket.status === 'completed' ? (
+                          <CheckCircle2 className="w-5 h-5" />
+                        ) : (
+                          <XCircle className="w-5 h-5" />
+                        )}
+                      </div>
+                      <div>
+                        <p className="font-bold text-white tracking-tight text-lg uppercase">{ticket.department_name}</p>
+                        <p className="text-[10px] font-bold text-blue-100/30 uppercase tracking-[0.2em] mt-1">
                           {format(new Date(ticket.created_date), 'MMM d, h:mm a')}
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
-                      <p className="font-semibold text-gray-900 text-sm">{ticket.ticket_number}</p>
-                      {getStatusBadge(ticket.status)}
+                    <div className="text-right">
+                      <p className="font-black text-white tracking-widest group-hover:text-purple-400 transition-colors uppercase text-lg">{ticket.ticket_number}</p>
+                      <div className="mt-2 text-right flex justify-end">
+                        {getStatusBadge(ticket.status)}
+                      </div>
                     </div>
                   </div>
                 ))}

@@ -13,34 +13,36 @@ export default function DepartmentCard({ department, stats, onSelect, delay = 0 
       transition={{ delay }}
       className="w-full h-full"
     >
-      <Card className="border-none shadow-lg hover:shadow-2xl transition-all cursor-pointer group bg-white/95 backdrop-blur-sm h-full flex flex-col"
+      <Card className="glass-card border-none hover:bg-white/10 transition-all duration-300 cursor-pointer group h-full flex flex-col relative overflow-hidden"
         onClick={() => onSelect(department)}
       >
-        <CardHeader className="p-4 sm:p-5 md:p-6">
-          <div className={`w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-${department.color}-500 rounded-xl flex items-center justify-center text-white text-lg sm:text-xl md:text-2xl font-bold mb-2 sm:mb-3 group-hover:scale-110 transition-transform flex-shrink-0`}>
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+
+        <CardHeader className="p-8 relative z-10">
+          <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-purple-400 text-2xl font-black mb-6 group-hover:scale-110 group-hover:border-purple-500/50 transition-all duration-500 shadow-xl">
             {department.name[0]}
           </div>
-          <CardTitle className="text-base sm:text-lg md:text-xl break-words leading-tight">{department.name}</CardTitle>
-          <p className="text-xs sm:text-sm text-gray-600 line-clamp-2 mt-1">{department.description}</p>
+          <CardTitle className="text-2xl font-black text-white tracking-tight leading-tight group-hover:text-purple-300 transition-colors uppercase">{department.name}</CardTitle>
+          <p className="text-blue-100/40 text-xs font-bold leading-relaxed mt-2 uppercase tracking-widest">{department.description}</p>
         </CardHeader>
-        <CardContent className="space-y-2 sm:space-y-3 p-4 sm:p-5 md:p-6 pt-0 mt-auto">
-          <div className="flex items-center justify-between p-2 sm:p-2.5 md:p-3 bg-gray-50 rounded-lg">
-            <div className="flex items-center gap-1.5 sm:gap-2">
-              <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600 flex-shrink-0" />
-              <span className="text-xs sm:text-sm text-gray-600">Waiting</span>
+
+        <CardContent className="space-y-4 p-8 pt-0 mt-auto relative z-10">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col items-center justify-center p-4 bg-white/5 rounded-2xl border border-white/5 group-hover:border-purple-500/20 transition-colors">
+              <Users className="w-5 h-5 text-purple-500 mb-2 opacity-50" />
+              <span className="text-[10px] font-black text-blue-100/20 uppercase tracking-widest mb-1">Waiting</span>
+              <span className="text-xl font-black text-white">{stats.waiting}</span>
             </div>
-            <span className="font-semibold text-sm sm:text-base">{stats.waiting}</span>
-          </div>
-          <div className="flex items-center justify-between p-2 sm:p-2.5 md:p-3 bg-gray-50 rounded-lg">
-            <div className="flex items-center gap-1.5 sm:gap-2">
-              <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600 flex-shrink-0" />
-              <span className="text-xs sm:text-sm text-gray-600">Est. Wait</span>
+            <div className="flex flex-col items-center justify-center p-4 bg-white/5 rounded-2xl border border-white/5 group-hover:border-blue-500/20 transition-colors">
+              <Clock className="w-5 h-5 text-blue-500 mb-2 opacity-50" />
+              <span className="text-[10px] font-black text-blue-100/20 uppercase tracking-widest mb-1">Latency</span>
+              <span className="text-xl font-black text-white">{stats.estimatedWait}<span className="text-xs ml-0.5 text-blue-100/30">m</span></span>
             </div>
-            <span className="font-semibold text-sm sm:text-base whitespace-nowrap">{stats.estimatedWait} min</span>
           </div>
-          <Button className="w-full mt-2 bg-blue-500 hover:bg-blue-600 group-hover:bg-blue-600 h-9 sm:h-10 text-xs sm:text-sm">
-            Select
-            <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+
+          <Button className="w-full h-14 bg-white/5 hover:bg-purple-600 text-white border border-white/10 hover:border-none font-black uppercase tracking-[0.3em] text-[10px] rounded-2xl transition-all active:scale-[0.98]">
+            ENGAGE
+            <ArrowRight className="w-4 h-4 ml-3 group-hover:translate-x-2 transition-transform" />
           </Button>
         </CardContent>
       </Card>

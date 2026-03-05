@@ -37,83 +37,89 @@ export default function StudentEntry() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <Link to={createPageUrl("Home")} className="inline-block mb-6">
-          <Button variant="ghost" size="sm">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Home
+    <div className="min-h-[80vh] flex items-center justify-center p-4 relative z-10">
+      <div className="w-full max-w-2xl">
+        <div className="flex justify-start mb-10">
+          <Button
+            variant="ghost"
+            onClick={() => navigate(createPageUrl("Home"))}
+            className="text-blue-100/40 hover:text-white hover:bg-white/5 font-black uppercase tracking-[0.3em] text-[10px] rounded-2xl px-6 h-12 transition-all group"
+          >
+            <ArrowLeft className="w-4 h-4 mr-3 group-hover:-translate-x-2 transition-transform" />
+            ABORT MISSION
           </Button>
-        </Link>
+        </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
         >
-          <Card className="shadow-2xl border-none">
-            <CardHeader className="text-center bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-t-lg">
-              <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Hash className="w-8 h-8" />
+          <Card className="glass-card border-none overflow-hidden group">
+            <CardHeader className="text-center pb-10 border-b border-white/5">
+              <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-blue-500/20 group-hover:rotate-12 transition-transform duration-500">
+                <Hash className="w-10 h-10 text-white" />
               </div>
-              <CardTitle className="text-2xl">Student Services</CardTitle>
-              <CardDescription className="text-blue-100">
-                Enter your 8-digit student number to get started
+              <CardTitle className="text-4xl font-black text-white tracking-tight uppercase">Access <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Terminal</span></CardTitle>
+              <CardDescription className="text-blue-100/30 font-medium text-lg mt-3">
+                Enter your 8-digit identification key to engage.
               </CardDescription>
             </CardHeader>
-            <CardContent className="p-8 space-y-6">
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="studentNumber" className="text-lg">Student Number</Label>
+            <CardContent className="p-12 space-y-12">
+              <form onSubmit={handleSubmit} className="space-y-8">
+                <div className="space-y-4">
+                  <Label htmlFor="studentNumber" className="text-[10px] font-black text-blue-400 uppercase tracking-[0.3em] ml-1">IDENTIFICATION KEY</Label>
                   <Input
                     id="studentNumber"
                     type="text"
                     maxLength={8}
-                    placeholder="12345678"
+                    placeholder="00000000"
                     value={studentNumber}
                     onChange={(e) => {
                       setStudentNumber(e.target.value.replace(/\D/g, ''));
                       setError("");
                     }}
-                    className="text-2xl text-center tracking-wider h-14 font-mono"
+                    className="text-4xl text-center tracking-[0.5em] h-20 font-black bg-white/5 border-white/10 text-white placeholder:text-white/5 rounded-3xl focus:ring-blue-500/50 focus:border-blue-500/50 transition-all shadow-inner"
                     autoFocus
                   />
                   {error && (
-                    <p className="text-sm text-red-600">{error}</p>
+                    <motion.p initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-xs text-red-400 font-black uppercase tracking-widest text-center mt-4">{error}</motion.p>
                   )}
                 </div>
 
                 <Button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 h-12 text-lg"
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 h-20 text-white font-black uppercase tracking-[0.4em] text-sm rounded-3xl shadow-2xl shadow-blue-500/20 transition-all active:scale-[0.98]"
                   disabled={studentNumber.length !== 8}
                 >
-                  Take a Ticket
-                  <ArrowRight className="ml-2 w-5 h-5" />
+                  INITIALIZE SESSION
+                  <ArrowRight className="ml-4 w-6 h-6 group-hover:translate-x-2 transition-transform" />
                 </Button>
               </form>
 
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300"></div>
+                  <div className="w-full border-t border-white/5"></div>
                 </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">or</span>
+                <div className="relative flex justify-center">
+                  <span className="px-6 bg-[#0B0118] text-blue-100/20 text-[10px] font-black uppercase tracking-[0.5em]">OPERATOR B</span>
                 </div>
               </div>
 
-              <Button
-                variant="outline"
-                className="w-full h-12"
-                onClick={handleCheckTicket}
-                disabled={studentNumber.length !== 8}
-              >
-                <Search className="mr-2 w-5 h-5" />
-                Check My Ticket Status
-              </Button>
+              <div className="grid grid-cols-1 gap-4">
+                <Button
+                  variant="outline"
+                  className="w-full h-16 bg-white/5 border-white/10 hover:bg-white/10 text-white font-black uppercase tracking-[0.3em] text-[10px] rounded-2xl transition-all"
+                  onClick={handleCheckTicket}
+                  disabled={studentNumber.length !== 8}
+                >
+                  <Search className="mr-3 w-4 h-4" />
+                  QUERY STATUS
+                </Button>
+              </div>
 
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <p className="text-sm text-blue-800">
-                  <strong>Note:</strong> You can only have one active ticket at a time. Complete or cancel your current ticket before taking a new one.
+              <div className="bg-blue-500/5 border border-blue-500/10 rounded-3xl p-6">
+                <p className="text-[10px] text-blue-400 font-bold uppercase tracking-widest leading-relaxed text-center">
+                  <span className="text-blue-200">CONSTRAINT:</span> ACTIVE SESSION LIMIT = 1. TERMINATE EXISTING CYCLES BEFORE NEW INITIATION.
                 </p>
               </div>
             </CardContent>

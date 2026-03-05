@@ -18,36 +18,35 @@ export default function CompletedToday({ tickets }) {
   }
 
   return (
-    <div className="grid gap-4">
+    <div className="grid gap-6">
       {tickets.map((ticket) => (
-        <Card key={ticket.id} className="border-none shadow-md bg-green-50">
-          <CardContent className="p-6">
-            <div className="flex items-start gap-4">
-              <div className={`w-10 h-10 ${ticket.status === 'cancelled' ? 'bg-red-500' : 'bg-green-500'} rounded-full flex items-center justify-center flex-shrink-0`}>
+        <Card key={ticket.id} className="glass-card border-none hover:bg-white/5 transition-all duration-300">
+          <CardContent className="p-8">
+            <div className="flex items-center gap-6">
+              <div className={`w-14 h-14 rounded-2xl border flex items-center justify-center ${ticket.status === 'cancelled' ? 'bg-red-500/10 border-red-500/20 text-red-400' : 'bg-green-500/10 border-green-500/20 text-green-400'}`}>
                 {ticket.status === 'cancelled' ? (
-                  <XCircle className="w-5 h-5 text-white" />
+                  <XCircle className="w-6 h-6" />
                 ) : (
-                  <CheckCircle2 className="w-5 h-5 text-white" />
+                  <CheckCircle2 className="w-6 h-6" />
                 )}
               </div>
               <div className="flex-1">
-                <div className="flex items-center gap-3 mb-2">
-                  <h3 className="text-lg font-semibold text-gray-900">{ticket.student_name}</h3>
-                  <Badge className={ticket.status === 'cancelled' ? 'bg-red-500' : 'bg-green-500'}>{ticket.ticket_number}</Badge>
+                <div className="flex items-center gap-4 mb-2">
+                  <h3 className="text-xl font-black text-white tracking-tight">{ticket.student_name}</h3>
+                  <Badge className={`font-black tracking-widest uppercase py-0.5 ${ticket.status === 'cancelled' ? 'bg-red-500/20 text-red-400 border-red-500/30' : 'bg-green-500/20 text-green-400 border-green-500/30'}`}>
+                    {ticket.ticket_number}
+                  </Badge>
                 </div>
-                <div className="flex flex-wrap gap-4 text-sm text-gray-600">
-                  <div className="flex items-center gap-1">
-                    <User className="w-4 h-4" />
+                <div className="flex flex-wrap gap-6 text-[10px] font-bold text-blue-100/30 uppercase tracking-[0.2em]">
+                  <div className="flex items-center gap-2">
+                    <User className="w-4 h-4 text-blue-500/50" />
                     {ticket.student_email || ticket.student_id}
                   </div>
-                  <div className="flex items-center gap-1">
-                    <Clock className="w-4 h-4" />
-                    {(ticket.status === 'cancelled' || ticket.status === 'skipped') ? 'Cancelled at' : 'Completed at'} {ticket.served_at ? format(new Date(ticket.served_at), 'h:mm a') : format(new Date(ticket.updated_at || ticket.created_at), 'h:mm a')}
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-blue-500/50" />
+                    {(ticket.status === 'cancelled' || ticket.status === 'skipped') ? 'TERMINATED AT' : 'RESOLVED AT'} {ticket.served_at ? format(new Date(ticket.served_at), 'h:mm a') : format(new Date(ticket.updated_at || ticket.created_at), 'h:mm a')}
                   </div>
                 </div>
-                <p className="text-sm text-gray-600 mt-2">
-                  <span className="font-medium">Department:</span> {ticket.department_name}
-                </p>
               </div>
             </div>
           </CardContent>

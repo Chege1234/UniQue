@@ -53,70 +53,71 @@ export default function StaffRequestManager({ requests }) {
 
   return (
     <>
-      <Card className="border-none shadow-lg">
-        <CardHeader>
+      <Card className="glass-card border-none overflow-hidden group">
+        <CardHeader className="p-8 border-b border-white/5 bg-white/5">
           <div className="flex justify-between items-center">
-            <CardTitle>Staff Access Requests</CardTitle>
-            <Badge variant="secondary" className="text-lg">
-              {pendingRequests.length} Pending
+            <CardTitle className="text-lg font-black text-white uppercase tracking-widest">Clearance Queue</CardTitle>
+            <Badge className="bg-purple-500/20 text-purple-400 border-none font-black text-[10px] tracking-widest px-4 py-1.5 rounded-full uppercase">
+              {pendingRequests.length} Pending requests
             </Badge>
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-0">
           {pendingRequests.length === 0 ? (
-            <div className="text-center py-12 text-gray-500">
-              <User className="w-12 h-12 mx-auto mb-3 text-gray-400" />
-              <p>No pending staff requests</p>
+            <div className="text-center py-20 text-blue-100/20">
+              <User className="w-16 h-16 mx-auto mb-6 opacity-10" />
+              <p className="text-[10px] font-black uppercase tracking-[0.5em]">No pending clearance requests</p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="divide-y divide-white/5">
               {pendingRequests.map((request) => (
-                <div key={request.id} className="flex flex-col md:flex-row md:items-center justify-between p-6 bg-yellow-50 border-2 border-yellow-200 rounded-lg gap-4">
+                <div key={request.id} className="flex flex-col xl:flex-row xl:items-center justify-between p-8 hover:bg-white/[0.02] transition-colors group">
                   <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                    <div className="flex items-center gap-6 mb-6">
+                      <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-2xl shadow-purple-500/20 group-hover:rotate-6 transition-transform">
                         {request.full_name[0].toUpperCase()}
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900 text-lg">{request.full_name}</h3>
-                        <Badge className="bg-blue-500">{request.department}</Badge>
+                        <h3 className="text-xl font-black text-white tracking-tight uppercase group-hover:text-purple-400 transition-colors">{request.full_name}</h3>
+                        <Badge className="bg-blue-500/10 text-blue-400 border-blue-500/20 font-black uppercase text-[9px] tracking-[0.2em] mt-1">{request.department}</Badge>
                       </div>
                     </div>
-                    <div className="grid md:grid-cols-2 gap-3 text-sm text-gray-600">
-                      <div className="flex items-center gap-2">
-                        <Mail className="w-4 h-4" />
-                        {request.email}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-blue-100/30">
+                      <div className="flex items-center gap-3">
+                        <Mail className="w-4 h-4 text-purple-500" />
+                        <span className="text-blue-100/60 lowercase font-medium text-xs">{request.email}</span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Phone className="w-4 h-4" />
+                      <div className="flex items-center gap-3">
+                        <Phone className="w-4 h-4 text-blue-500" />
                         {request.phone}
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Clock className="w-4 h-4" />
-                        {format(new Date(request.created_date), 'MMM dd, yyyy h:mm a')}
+                      <div className="flex items-center gap-3">
+                        <Clock className="w-4 h-4 text-purple-500" />
+                        {format(new Date(request.created_date), 'MMM dd, h:mm a')}
                       </div>
                     </div>
                     {request.notes && (
-                      <div className="mt-3 p-3 bg-white rounded border border-yellow-200">
-                        <p className="text-sm text-gray-700"><strong>Notes:</strong> {request.notes}</p>
+                      <div className="mt-6 p-4 bg-white/5 border border-white/5 rounded-2xl">
+                        <p className="text-[9px] font-black text-blue-100/20 uppercase tracking-widest mb-1">SUPPLEMENTAL INTEL:</p>
+                        <p className="text-xs text-blue-100/60 font-medium leading-relaxed italic">"{request.notes}"</p>
                       </div>
                     )}
                   </div>
-                  <div className="flex md:flex-col gap-2">
+                  <div className="flex xl:flex-col gap-3 mt-8 xl:mt-0 xl:ml-8">
                     <Button
                       onClick={() => handleApprove(request)}
-                      className="flex-1 md:flex-none bg-green-500 hover:bg-green-600"
+                      className="flex-1 xl:w-40 h-14 bg-green-500/10 hover:bg-green-500/20 text-green-400 border border-green-500/20 font-black uppercase tracking-widest text-[10px] rounded-xl transition-all"
                     >
-                      <CheckCircle2 className="w-4 h-4 mr-2" />
-                      Approve
+                      <CheckCircle2 className="w-4 h-4 mr-3" />
+                      AUTHORIZE
                     </Button>
                     <Button
                       onClick={() => handleReject(request)}
-                      variant="destructive"
-                      className="flex-1 md:flex-none"
+                      variant="ghost"
+                      className="flex-1 xl:w-40 h-14 bg-red-500/5 hover:bg-red-500/10 text-red-400 border border-red-500/10 font-black uppercase tracking-widest text-[10px] rounded-xl transition-all"
                     >
-                      <XCircle className="w-4 h-4 mr-2" />
-                      Reject
+                      <XCircle className="w-4 h-4 mr-3" />
+                      REJECT
                     </Button>
                   </div>
                 </div>
@@ -125,21 +126,21 @@ export default function StaffRequestManager({ requests }) {
           )}
 
           {processedRequests.length > 0 && (
-            <div className="mt-8">
-              <h3 className="font-semibold text-gray-900 mb-4">Recent Processed Requests</h3>
-              <div className="space-y-3">
-                {processedRequests.slice(0, 5).map((request) => (
-                  <div key={request.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-white font-bold">
+            <div className="p-8 border-t border-white/5 bg-white/[0.01]">
+              <h3 className="text-[10px] font-black text-blue-100/20 uppercase tracking-[0.4em] mb-6">Historical Record</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {processedRequests.slice(0, 6).map((request) => (
+                  <div key={request.id} className="flex items-center justify-between p-5 bg-white/5 border border-white/5 rounded-2xl hover:bg-white/10 transition-all group/item">
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-blue-100 font-bold group-hover/item:border-purple-500/30 transition-colors">
                         {request.full_name[0].toUpperCase()}
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900">{request.full_name}</p>
-                        <p className="text-sm text-gray-600">{request.department}</p>
+                        <p className="text-xs font-black text-white uppercase tracking-tight">{request.full_name}</p>
+                        <p className="text-[8px] font-black text-blue-100/30 uppercase tracking-widest mt-0.5">{request.department}</p>
                       </div>
                     </div>
-                    <Badge className={request.status === 'approved' ? 'bg-green-500' : 'bg-red-500'}>
+                    <Badge className={request.status === 'approved' ? 'bg-green-500/20 text-green-400 border-none uppercase text-[8px] tracking-widest' : 'bg-red-500/20 text-red-400 border-none uppercase text-[8px] tracking-widest'}>
                       {request.status}
                     </Badge>
                   </div>
@@ -158,7 +159,7 @@ export default function StaffRequestManager({ requests }) {
               {actionType === 'approve' ? 'Approve' : 'Reject'} Staff Request
             </DialogTitle>
             <DialogDescription>
-              {actionType === 'approve' 
+              {actionType === 'approve'
                 ? 'Are you sure you want to approve this staff access request? You will need to manually invite the user via Dashboard → Users → Invite User.'
                 : 'Are you sure you want to reject this staff access request?'}
             </DialogDescription>

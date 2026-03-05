@@ -158,32 +158,32 @@ export default function StaffDashboard() {
 
   const stats = [
     {
-      title: "Waiting in Queue",
+      title: "Queue Size",
       value: waitingTickets.length,
       icon: Users,
-      color: "text-blue-600",
-      bgColor: "bg-blue-100"
+      color: "text-blue-400",
+      bgColor: "bg-blue-500/10"
     },
     {
-      title: "Currently Calling",
-      value: calledTickets.length,
+      title: "Active Calls",
+      value: servingTickets.length,
       icon: TrendingUp,
-      color: "text-orange-600",
-      bgColor: "bg-orange-100"
+      color: "text-purple-400",
+      bgColor: "bg-purple-500/10"
     },
     {
-      title: "Processed Today",
+      title: "Handled Today",
       value: completedToday.length,
       icon: CheckCircle2,
-      color: "text-green-600",
-      bgColor: "bg-green-100"
+      color: "text-green-400",
+      bgColor: "bg-green-500/10"
     },
     {
-      title: "Avg. Service Time",
-      value: `${Math.round(completedToday.length > 0 ? 15 : 0)}m`,
+      title: "Efficiency",
+      value: `${Math.round(completedToday.length > 0 ? 95 : 0)}%`,
       icon: Clock,
-      color: "text-purple-600",
-      bgColor: "bg-purple-100"
+      color: "text-amber-400",
+      bgColor: "bg-amber-500/10"
     }
   ];
 
@@ -240,35 +240,47 @@ export default function StaffDashboard() {
   }
 
   return (
-    <div className="space-y-6 sm:space-y-8">
-      <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Staff Dashboard</h1>
-        {user.role === 'admin' ? (
-          <div className="mt-3 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
-            <Badge className="bg-orange-500 text-sm sm:text-base px-3 sm:px-4 py-1">
-              👑 Admin Preview Mode
-            </Badge>
-            <div className="flex items-center gap-2 w-full sm:w-auto">
-              <Building2 className="w-5 h-5 text-gray-600 flex-shrink-0" />
-              <Select value={selectedDepartment || ""} onValueChange={setSelectedDepartment}>
-                <SelectTrigger className="w-full sm:w-64">
-                  <SelectValue placeholder="Select department..." />
-                </SelectTrigger>
-                <SelectContent>
-                  {departments.map(dept => (
-                    <SelectItem key={dept.id} value={dept.name}>
-                      {dept.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+    <div className="space-y-10 relative z-10">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+        >
+          <h1 className="text-4xl font-extrabold text-white tracking-tight">
+            Staff <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">Terminal</span>
+          </h1>
+          {user.role === 'admin' ? (
+            <div className="mt-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <Badge className="bg-purple-500/20 text-purple-300 border border-purple-500/30 text-xs font-bold uppercase tracking-widest px-3 py-1 backdrop-blur-md">
+                👑 Authority Override
+              </Badge>
+              <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-2xl p-1 pr-4">
+                <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center">
+                  <Building2 className="w-5 h-5 text-purple-400" />
+                </div>
+                <Select value={selectedDepartment || ""} onValueChange={setSelectedDepartment}>
+                  <SelectTrigger className="w-full sm:w-64 bg-transparent border-none text-white font-bold h-10 focus:ring-0">
+                    <SelectValue placeholder="Network Node..." />
+                  </SelectTrigger>
+                  <SelectContent className="glass-card border-white/10 text-white">
+                    {departments.map(dept => (
+                      <SelectItem key={dept.id} value={dept.name} className="hover:bg-white/5 cursor-pointer">
+                        {dept.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-          </div>
-        ) : (
-          <p className="text-sm sm:text-base text-gray-600 mt-1">
-            Managing queue for: <Badge className="text-sm sm:text-base">{user.department}</Badge>
-          </p>
-        )}
+          ) : (
+            <div className="mt-3 flex items-center gap-2">
+              <span className="text-blue-200/50 font-medium tracking-wide">Managing Node:</span>
+              <Badge className="bg-blue-500/20 text-blue-400 border border-blue-500/30 font-black tracking-widest uppercase py-1">
+                {user.department}
+              </Badge>
+            </div>
+          )}
+        </motion.div>
       </div>
 
       {!activeDepartment && user.role === 'admin' ? (
@@ -281,8 +293,8 @@ export default function StaffDashboard() {
         </Card>
       ) : (
         <>
-          {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+          {/* Stats Overlay */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {stats.map((stat, index) => (
               <motion.div
                 key={stat.title}
@@ -290,15 +302,15 @@ export default function StaffDashboard() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Card className="border-none shadow-lg">
-                  <CardContent className="p-4 sm:p-6">
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <Card className="glass-card border-none group hover:bg-white/10 transition-all duration-300">
+                  <CardContent className="p-6">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs sm:text-sm text-gray-600 mb-1 truncate">{stat.title}</p>
-                        <p className="text-xl sm:text-2xl font-bold text-gray-900">{stat.value}</p>
+                        <p className="text-[10px] font-black text-blue-200/30 uppercase tracking-[0.2em] mb-1 truncate">{stat.title}</p>
+                        <p className="text-2xl font-black text-white tracking-tight">{stat.value}</p>
                       </div>
-                      <div className={`w-10 h-10 sm:w-12 sm:h-12 ${stat.bgColor} rounded-xl flex items-center justify-center flex-shrink-0`}>
-                        <stat.icon className={`w-5 h-5 sm:w-6 sm:h-6 ${stat.color}`} />
+                      <div className={`w-12 h-12 ${stat.bgColor} border border-white/5 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform`}>
+                        <stat.icon className={`w-6 h-6 ${stat.color.replace('text-', 'text-glow text-')}`} />
                       </div>
                     </div>
                   </CardContent>
@@ -307,23 +319,23 @@ export default function StaffDashboard() {
             ))}
           </div>
 
-          {/* Queue Management */}
-          <Tabs defaultValue="waiting" className="space-y-4 sm:space-y-6">
-            <TabsList className="bg-white shadow-md w-full sm:w-auto grid grid-cols-3 sm:inline-flex">
-              <TabsTrigger value="waiting" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white text-xs sm:text-sm px-2 sm:px-4">
-                <span className="hidden sm:inline">Waiting Queue</span>
+          {/* Queue Management Interface */}
+          <Tabs defaultValue="waiting" className="space-y-8">
+            <TabsList className="bg-white/5 border border-white/10 p-1.5 rounded-2xl h-14 sm:w-auto grid grid-cols-3 sm:inline-flex backdrop-blur-md">
+              <TabsTrigger value="waiting" className="rounded-xl data-[state=active]:bg-purple-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-purple-900/40 text-xs font-bold tracking-widest uppercase transition-all duration-300">
+                <span className="hidden sm:inline">Waiting List</span>
                 <span className="sm:hidden">Waiting</span>
-                <span className="ml-1">({waitingTickets.length})</span>
+                <Badge className="ml-2 bg-white/10 text-white border-none text-[10px] tabular-nums">{waitingTickets.length}</Badge>
               </TabsTrigger>
-              <TabsTrigger value="serving" className="data-[state=active]:bg-orange-500 data-[state=active]:text-white text-xs sm:text-sm px-2 sm:px-4">
-                <span className="hidden sm:inline">Currently Calling</span>
-                <span className="sm:hidden">Calling</span>
-                <span className="ml-1">({servingTickets.length})</span>
+              <TabsTrigger value="serving" className="rounded-xl data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-blue-900/40 text-xs font-bold tracking-widest uppercase transition-all duration-300">
+                <span className="hidden sm:inline">Live Session</span>
+                <span className="sm:hidden">Session</span>
+                <Badge className="ml-2 bg-white/10 text-white border-none text-[10px] tabular-nums">{servingTickets.length}</Badge>
               </TabsTrigger>
-              <TabsTrigger value="completed" className="data-[state=active]:bg-green-500 data-[state=active]:text-white text-xs sm:text-sm px-2 sm:px-4">
-                <span className="hidden sm:inline">Processed Today</span>
-                <span className="sm:hidden">Done</span>
-                <span className="ml-1">({completedToday.length})</span>
+              <TabsTrigger value="completed" className="rounded-xl data-[state=active]:bg-green-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-green-900/40 text-xs font-bold tracking-widest uppercase transition-all duration-300">
+                <span className="hidden sm:inline">Terminal History</span>
+                <span className="sm:hidden">History</span>
+                <Badge className="ml-2 bg-white/10 text-white border-none text-[10px] tabular-nums">{completedToday.length}</Badge>
               </TabsTrigger>
             </TabsList>
 

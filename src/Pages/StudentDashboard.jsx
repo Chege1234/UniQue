@@ -88,42 +88,50 @@ export default function StudentDashboard() {
   }
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">
-            Welcome back, {user.full_name}!
-          </h1>
-          <p className="text-gray-600 mt-1">Manage your queue tickets and track your position</p>
-        </div>
-        <Link
-          to={activeTickets.length > 0 ? '#' : createPageUrl("TakeTicket")}
-          aria-disabled={activeTickets.length > 0}
-          onClick={(e) => activeTickets.length > 0 && e.preventDefault()}
-          className={`${activeTickets.length > 0 ? 'cursor-not-allowed' : ''}`}
+    <div className="space-y-10 relative z-10">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
         >
-          <Button
-            className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-lg disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed"
-            disabled={activeTickets.length > 0}
-            title={activeTickets.length > 0 ? "You can only have one active ticket at a time" : "Take a new ticket"}
+          <h1 className="text-4xl font-extrabold text-white tracking-tight">
+            Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">{user.full_name.split(' ')[0]}!</span>
+          </h1>
+          <p className="text-blue-200/50 mt-2 font-medium">Your personal queue command center</p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+        >
+          <Link
+            to={activeTickets.length > 0 ? '#' : createPageUrl("TakeTicket")}
+            aria-disabled={activeTickets.length > 0}
+            onClick={(e) => activeTickets.length > 0 && e.preventDefault()}
+            className={`${activeTickets.length > 0 ? 'cursor-not-allowed' : ''}`}
           >
-            {activeTickets.length > 0 ? (
-              <>
-                <Ban className="w-4 h-4 mr-2" />
-                Ticket Limit Reached
-              </>
-            ) : (
-              <>
-                <Plus className="w-4 h-4 mr-2" />
-                Take New Ticket
-              </>
-            )}
-          </Button>
-        </Link>
+            <Button
+              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 shadow-xl shadow-purple-900/20 px-8 py-6 rounded-2xl font-bold uppercase tracking-wider disabled:opacity-50"
+              disabled={activeTickets.length > 0}
+            >
+              {activeTickets.length > 0 ? (
+                <>
+                  <Ban className="w-5 h-5 mr-3" />
+                  Limit Reached
+                </>
+              ) : (
+                <>
+                  <Plus className="w-5 h-5 mr-3" />
+                  New Ticket
+                </>
+              )}
+            </Button>
+          </Link>
+        </motion.div>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {stats.map((stat, index) => (
           <motion.div
             key={stat.title}
@@ -131,15 +139,15 @@ export default function StudentDashboard() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
           >
-            <Card className="border-none shadow-lg">
-              <CardContent className="p-6">
+            <Card className="glass-card border-none group hover:scale-[1.02] transition-transform duration-300">
+              <CardContent className="p-8">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600 mb-1">{stat.title}</p>
-                    <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
+                    <p className="text-xs font-bold text-blue-200/40 uppercase tracking-widest mb-1">{stat.title}</p>
+                    <p className="text-4xl font-black text-white tracking-tighter">{stat.value}</p>
                   </div>
-                  <div className={`w-14 h-14 ${stat.bgColor} rounded-xl flex items-center justify-center`}>
-                    <stat.icon className={`w-7 h-7 ${stat.color}`} />
+                  <div className={`w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 group-hover:border-purple-500/50 transition-colors`}>
+                    <stat.icon className={`w-7 h-7 ${stat.color.replace('text-', 'text-glow text-')}`} />
                   </div>
                 </div>
               </CardContent>
@@ -150,30 +158,45 @@ export default function StudentDashboard() {
 
       {/* Active Tickets */}
       {activeTickets.length > 0 ? (
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Active Tickets</h2>
-          <div className="grid gap-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+        >
+          <h2 className="text-xl font-black text-white uppercase tracking-widest mb-6 flex items-center gap-3">
+            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+            Active Session
+          </h2>
+          <div className="grid gap-8">
             {activeTickets.map((ticket) => (
               <ActiveTicketCard key={ticket.id} ticket={ticket} onUpdate={refetch} />
             ))}
           </div>
-        </div>
+        </motion.div>
       ) : (
-        <Card className="border-2 border-dashed border-gray-300 bg-gray-50/50">
-          <CardContent className="p-12 text-center">
-            <AlertCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-700 mb-2">No Active Tickets</h3>
-            <p className="text-gray-600 mb-6">
-              You don't have any active tickets. Take a new ticket to get started.
-            </p>
-            <Link to={createPageUrl("TakeTicket")}>
-              <Button className="bg-blue-500 hover:bg-blue-600">
-                <Plus className="w-4 h-4 mr-2" />
-                Take Ticket
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+        >
+          <Card className="glass-card border-none overflow-hidden relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-blue-500/5" />
+            <CardContent className="p-16 text-center relative z-10">
+              <div className="w-24 h-24 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl">
+                <AlertCircle className="w-10 h-10 text-blue-300/40" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-3 tracking-tight">No Active Tickets</h3>
+              <p className="text-blue-100/40 mb-10 max-w-sm mx-auto font-medium">
+                You're currently not in any queue. Ready to experience our seamless service?
+              </p>
+              <Link to={createPageUrl("TakeTicket")}>
+                <Button className="bg-white/10 hover:bg-white/20 text-white border border-white/10 rounded-2xl px-10 py-7 text-lg font-bold group">
+                  <Plus className="w-5 h-5 mr-3 group-hover:rotate-90 transition-transform" />
+                  INITIATE SESSION
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+        </motion.div>
       )}
 
       {/* Recent History */}

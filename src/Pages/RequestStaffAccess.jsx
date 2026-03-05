@@ -44,39 +44,39 @@ export default function RequestStaffAccess() {
 
   if (showSuccess) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 flex items-center justify-center p-4">
+      <div className="min-h-[80vh] flex items-center justify-center p-4 relative z-10 text-center">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="w-full max-w-md"
+          className="w-full max-w-2xl"
         >
-          <Card className="shadow-2xl border-none">
-            <CardContent className="p-12 text-center">
-              <CheckCircle2 className="w-20 h-20 text-green-500 mx-auto mb-6" />
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Request Submitted!
+          <Card className="glass-card border-none p-16">
+            <CardContent className="p-0">
+              <div className="w-24 h-24 bg-green-500/20 border border-green-500/30 rounded-[40px] flex items-center justify-center mx-auto mb-10 shadow-2xl shadow-green-500/20">
+                <CheckCircle2 className="w-12 h-12 text-green-400" />
+              </div>
+              <h2 className="text-4xl font-black text-white tracking-tight mb-6 uppercase">
+                Uplink <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-400">Initiated</span>
               </h2>
-              <p className="text-gray-600 mb-6">
-                Your staff access request has been sent to the administrator. You will be contacted at <strong>{formData.email}</strong> once approved.
+              <p className="text-blue-100/40 font-medium text-lg leading-relaxed mb-10">
+                Clearance request for {formData.email} has been broadcast to the central management node. Monitor your communication channels for validation.
               </p>
-              <div className="space-y-3">
-                <Alert className="bg-blue-50 border-blue-200">
-                  <AlertDescription className="text-blue-800 text-left">
-                    <strong>What happens next:</strong>
-                    <ol className="list-decimal list-inside mt-2 space-y-1 text-sm">
-                      <li>Admin reviews your request</li>
-                      <li>Admin approves and sends you an invite email</li>
-                      <li>You create your account from the email link</li>
-                      <li>Return to /StaffLogin and login</li>
-                      <li>Your account will be automatically configured</li>
-                    </ol>
-                  </AlertDescription>
-                </Alert>
-                <Link to={createPageUrl("StaffLogin")}>
-                  <Button className="w-full">
-                    Back to Staff Login
-                  </Button>
-                </Link>
+              <div className="space-y-8">
+                <div className="bg-blue-500/5 border border-blue-500/10 rounded-3xl p-8 text-left">
+                  <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-4">Pipeline Protocol:</p>
+                  <ol className="text-[10px] text-blue-100/30 font-bold uppercase tracking-[0.15em] space-y-4">
+                    <li className="flex items-center gap-4"><span className="w-6 h-6 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">1</span> Superuser reviews credentials</li>
+                    <li className="flex items-center gap-4"><span className="w-6 h-6 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">2</span> Authorization vector generated and dispatched</li>
+                    <li className="flex items-center gap-4"><span className="w-6 h-6 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">3</span> Synchronize account via encrypted link</li>
+                    <li className="flex items-center gap-4"><span className="w-6 h-6 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">4</span> Re-engage Staff Terminal</li>
+                  </ol>
+                </div>
+                <Button
+                  onClick={() => navigate(createPageUrl("StaffLogin"))}
+                  className="w-full h-16 bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-500 hover:to-blue-300 text-white font-black uppercase tracking-[0.3em] text-sm rounded-2xl shadow-2xl transition-all active:scale-[0.98]"
+                >
+                  RETURN TO TERMINAL
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -86,115 +86,124 @@ export default function RequestStaffAccess() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 p-4 md:p-8">
-      <div className="max-w-2xl mx-auto">
-        <Link to={createPageUrl("StaffLogin")}>
-          <Button variant="ghost" className="mb-6">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Staff Login
+    <div className="min-h-screen relative z-10 px-4 py-12 md:py-20">
+      <div className="max-w-3xl mx-auto">
+        <div className="flex justify-start mb-10">
+          <Button
+            variant="ghost"
+            onClick={() => navigate(createPageUrl("StaffLogin"))}
+            className="text-blue-100/40 hover:text-white hover:bg-white/5 font-black uppercase tracking-[0.3em] text-[10px] rounded-2xl px-6 h-12 transition-all group"
+          >
+            <ArrowLeft className="w-4 h-4 mr-3 group-hover:-translate-x-2 transition-transform" />
+            ABORT MISSION
           </Button>
-        </Link>
+        </div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <Card className="shadow-2xl border-none">
-            <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
-              <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <UserPlus className="w-8 h-8" />
+          <Card className="glass-card border-none overflow-hidden group">
+            <CardHeader className="text-center pb-12 border-b border-white/5">
+              <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-blue-400 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-blue-500/20 group-hover:rotate-12 transition-transform duration-500">
+                <UserPlus className="w-10 h-10 text-white" />
               </div>
-              <CardTitle className="text-2xl text-center">Request Staff Access</CardTitle>
-              <CardDescription className="text-blue-100 text-center">
-                Submit your request and wait for admin approval
+              <CardTitle className="text-4xl font-black text-white tracking-tight uppercase">Clearance <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-200">Request</span></CardTitle>
+              <CardDescription className="text-blue-100/30 font-medium text-lg mt-3">
+                Submit your credentials for administrative validation.
               </CardDescription>
             </CardHeader>
-            <CardContent className="p-8">
+            <CardContent className="p-12">
               <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2">
-                  <Label htmlFor="full_name">Full Name *</Label>
-                  <Input
-                    id="full_name"
-                    value={formData.full_name}
-                    onChange={(e) => setFormData({...formData, full_name: e.target.value})}
-                    required
-                    placeholder="John Doe"
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-3">
+                    <Label htmlFor="full_name" className="text-[10px] font-black text-blue-400 uppercase tracking-[0.25em] ml-1">FULL LEGAL IDENTITY</Label>
+                    <Input
+                      id="full_name"
+                      value={formData.full_name}
+                      onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
+                      required
+                      placeholder="John Doe"
+                      className="h-14 bg-white/5 border-white/10 text-white placeholder:text-white/10 rounded-2xl focus:ring-blue-500/50 focus:border-blue-500/50 text-lg font-bold"
+                    />
+                  </div>
+
+                  <div className="space-y-3">
+                    <Label htmlFor="email" className="text-[10px] font-black text-blue-400 uppercase tracking-[0.25em] ml-1">COMMUNICATION VECTOR</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      required
+                      placeholder="john@university.edu"
+                      className="h-14 bg-white/5 border-white/10 text-white placeholder:text-white/10 rounded-2xl focus:ring-blue-500/50 focus:border-blue-500/50 text-lg font-bold"
+                    />
+                  </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email Address *</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    required
-                    placeholder="john@university.edu"
-                  />
-                  <p className="text-xs text-gray-500">
-                    Use this EXACT email when creating your account after admin approval
-                  </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-3">
+                    <Label htmlFor="phone" className="text-[10px] font-black text-blue-400 uppercase tracking-[0.25em] ml-1">CONTACT TELEMETRY</Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      required
+                      placeholder="+1234567890"
+                      className="h-14 bg-white/5 border-white/10 text-white placeholder:text-white/10 rounded-2xl focus:ring-blue-500/50 focus:border-blue-500/50 text-lg font-bold"
+                    />
+                  </div>
+
+                  <div className="space-y-3">
+                    <Label htmlFor="department" className="text-[10px] font-black text-blue-400 uppercase tracking-[0.25em] ml-1">TARGET DEPARTMENT</Label>
+                    <Select
+                      value={formData.department}
+                      onValueChange={(value) => setFormData({ ...formData, department: value })}
+                      required
+                    >
+                      <SelectTrigger className="h-14 bg-white/5 border-white/10 text-white rounded-2xl focus:ring-blue-500/50 focus:border-blue-500/50 text-lg font-bold">
+                        <SelectValue placeholder="Select node..." />
+                      </SelectTrigger>
+                      <SelectContent className="glass-card border-white/10 text-white">
+                        <SelectItem value="Admissions" className="hover:bg-white/5">Admissions</SelectItem>
+                        <SelectItem value="Financial Aid" className="hover:bg-white/5">Financial Aid</SelectItem>
+                        <SelectItem value="Registrar" className="hover:bg-white/5">Registrar</SelectItem>
+                        <SelectItem value="Student Affairs" className="hover:bg-white/5">Student Affairs</SelectItem>
+                        <SelectItem value="IT Support" className="hover:bg-white/5">IT Support</SelectItem>
+                        <SelectItem value="Library" className="hover:bg-white/5">Library</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="phone">Phone Number *</Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    value={formData.phone}
-                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                    required
-                    placeholder="+1234567890"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="department">Department *</Label>
-                  <Select
-                    value={formData.department}
-                    onValueChange={(value) => setFormData({...formData, department: value})}
-                    required
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select department" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Admissions">Admissions</SelectItem>
-                      <SelectItem value="Financial Aid">Financial Aid</SelectItem>
-                      <SelectItem value="Registrar">Registrar</SelectItem>
-                      <SelectItem value="Student Affairs">Student Affairs</SelectItem>
-                      <SelectItem value="IT Support">IT Support</SelectItem>
-                      <SelectItem value="Library">Library</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="notes">Additional Notes (Optional)</Label>
+                <div className="space-y-3">
+                  <Label htmlFor="notes" className="text-[10px] font-black text-blue-400 uppercase tracking-[0.25em] ml-1">SUPPLEMENTAL TELEMETRY (OPTIONAL)</Label>
                   <Textarea
                     id="notes"
                     value={formData.notes}
-                    onChange={(e) => setFormData({...formData, notes: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                     placeholder="Any additional information..."
-                    rows={3}
+                    rows={4}
+                    className="bg-white/5 border-white/10 text-white placeholder:text-white/10 rounded-2xl focus:ring-blue-500/50 focus:border-blue-500/50 text-base font-medium p-6"
                   />
                 </div>
 
                 <Button
                   type="submit"
-                  className="w-full h-12 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
+                  className="w-full h-20 bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-500 hover:to-blue-300 text-white font-black uppercase tracking-[0.4em] text-sm rounded-3xl shadow-2xl shadow-blue-500/20 transition-all active:scale-[0.98]"
                   disabled={createRequestMutation.isPending}
                 >
                   {createRequestMutation.isPending ? (
                     <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Submitting...
+                      <Loader2 className="w-6 h-6 mr-4 animate-spin" />
+                      SUBMITTING CLEARANCE REQUEST...
                     </>
                   ) : (
                     <>
-                      <UserPlus className="w-4 h-4 mr-2" />
-                      Submit Request
+                      <UserPlus className="w-6 h-6 mr-4" />
+                      BROADCAST REQUEST
                     </>
                   )}
                 </Button>

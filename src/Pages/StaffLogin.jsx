@@ -18,56 +18,56 @@ export default function StaffLogin() {
     const checkAuthAndConfigure = async () => {
       try {
         const authenticated = await base44.auth.isAuthenticated();
-        
+
         if (!authenticated) {
           setIsLoading(false);
           return;
         }
 
         const currentUser = await base44.auth.me();
-        
+
         // Admin users go straight to admin dashboard (but can access staff dashboard from there)
         if (currentUser.role === 'admin') {
           navigate(createPageUrl("AdminDashboard"));
           return;
         }
-        
+
         // Check if user already has department configured
         if (currentUser.department) {
           navigate(createPageUrl("StaffDashboard"));
           return;
         }
-        
+
         // User is authenticated but not configured
         setIsConfiguring(true);
         setConfigMessage("Checking your staff access...");
         setDebugInfo(`Looking for approved request with email: ${currentUser.email}`);
-        
+
         try {
           // Get ALL staff requests and filter manually to avoid case sensitivity issues
           const allRequests = await base44.entities.StaffRequest.list();
           setDebugInfo(prev => prev + `\n\nFound ${allRequests.length} total requests`);
-          
-          const approvedRequest = allRequests.find(r => 
-            r.email.toLowerCase() === currentUser.email.toLowerCase() && 
+
+          const approvedRequest = allRequests.find(r =>
+            r.email.toLowerCase() === currentUser.email.toLowerCase() &&
             r.status === 'approved'
           );
-          
+
           if (approvedRequest) {
             setDebugInfo(prev => prev + `\n\nFound approved request for ${approvedRequest.email}, department: ${approvedRequest.department}`);
             setConfigMessage("Configuring your staff account...");
-            
+
             // Update user with department
             await base44.auth.updateMe({
               department: approvedRequest.department,
               phone: approvedRequest.phone || ""
             });
-            
+
             setConfigMessage("✓ Account configured successfully! Redirecting...");
             setDebugInfo(prev => prev + "\n\nUpdate successful!");
-            
+
             await new Promise(resolve => setTimeout(resolve, 1500));
-            
+
             // Hard reload to ensure user data is refreshed
             window.location.href = createPageUrl("StaffDashboard");
           } else {
@@ -86,7 +86,7 @@ export default function StaffLogin() {
         setIsLoading(false);
       }
     };
-    
+
     checkAuthAndConfigure();
   }, [navigate]);
 
@@ -100,44 +100,51 @@ export default function StaffLogin() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+      <div className="flex items-center justify-center min-h-[70vh] relative z-10">
+        <Loader2 className="h-10 w-10 animate-spin text-purple-500" />
       </div>
     );
   }
 
   if (isConfiguring) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 p-4">
+      <div className="flex items-center justify-center min-h-[80vh] p-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           className="w-full max-w-2xl"
         >
-          <Card className="shadow-2xl border-none">
-            <CardContent className="p-8 text-center">
+          <Card className="glass-card border-none p-12 text-center">
+            <CardContent className="p-0">
               {configMessage.includes("successfully") ? (
-                <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-4 animate-bounce" />
+                <CheckCircle2 className="w-20 h-20 text-green-400 mx-auto mb-8 animate-bounce shadow-2xl shadow-green-500/20" />
               ) : configMessage.includes("No approved") ? (
-                <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+                <AlertCircle className="w-20 h-20 text-red-400 mx-auto mb-8 shadow-2xl shadow-red-500/20" />
               ) : (
-                <Loader2 className="w-16 h-16 text-blue-500 mx-auto mb-4 animate-spin" />
+                <Loader2 className="w-20 h-20 text-purple-500 mx-auto mb-8 animate-spin shadow-2xl shadow-purple-500/20" />
               )}
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-black text-white tracking-tight mb-6 uppercase">
                 {configMessage}
               </h2>
               {debugInfo && (
-                <div className="mt-4 p-4 bg-gray-100 rounded-lg text-left">
-                  <p className="text-xs font-mono text-gray-700 whitespace-pre-wrap">{debugInfo}</p>
+                <div className="mt-8 p-6 bg-white/5 border border-white/5 rounded-2xl text-left">
+                  <p className="text-[10px] font-mono text-blue-100/30 whitespace-pre-wrap leading-relaxed uppercase tracking-widest">{debugInfo}</p>
                 </div>
               )}
               {configMessage.includes("No approved") && (
-                <div className="mt-6">
-                  <Button onClick={handleRequestAccess} className="mr-2">
-                    Submit New Request
+                <div className="mt-10 flex flex-col sm:flex-row gap-4">
+                  <Button
+                    onClick={handleRequestAccess}
+                    className="flex-1 h-16 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-black uppercase tracking-[0.3em] text-xs rounded-2xl shadow-2xl transition-all"
+                  >
+                    SUBMIT NEW REQUEST
                   </Button>
-                  <Button variant="outline" onClick={() => base44.auth.logout()}>
-                    Logout
+                  <Button
+                    variant="ghost"
+                    onClick={() => base44.auth.logout()}
+                    className="flex-1 h-16 text-blue-100/30 hover:text-white hover:bg-white/5 font-black uppercase tracking-[0.3em] text-[10px] rounded-2xl transition-all"
+                  >
+                    TERMINATE SESSION
                   </Button>
                 </div>
               )}
@@ -149,58 +156,58 @@ export default function StaffLogin() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 flex items-center justify-center p-4">
+    <div className="min-h-[80vh] flex items-center justify-center p-4 relative z-10">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="w-full max-w-2xl"
       >
-        <Card className="shadow-2xl border-none">
-          <CardHeader className="text-center bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-t-lg">
-            <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Shield className="w-8 h-8" />
+        <Card className="glass-card border-none overflow-hidden group">
+          <CardHeader className="text-center pb-10 border-b border-white/5">
+            <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-blue-400 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-blue-500/20 group-hover:scale-110 transition-transform duration-500">
+              <Shield className="w-10 h-10 text-white" />
             </div>
-            <CardTitle className="text-2xl">Staff & Admin Access</CardTitle>
-            <CardDescription className="text-blue-100">
-              Login to manage queues and system settings
+            <CardTitle className="text-4xl font-black text-white tracking-tight uppercase">Staff <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-200">Terminal</span></CardTitle>
+            <CardDescription className="text-blue-100/30 font-medium text-lg mt-3">
+              Authentication required for administrative uplink.
             </CardDescription>
           </CardHeader>
-          <CardContent className="p-8 space-y-4">
+          <CardContent className="p-12 space-y-12">
             <Button
               onClick={handleLogin}
-              className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 h-12 text-lg"
+              className="w-full h-20 bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-500 hover:to-blue-300 text-white font-black uppercase tracking-[0.4em] text-sm rounded-3xl shadow-2xl shadow-blue-500/20 transition-all active:scale-[0.98]"
             >
-              <Shield className="w-5 h-5 mr-2" />
-              Login as Staff / Admin
+              <Shield className="w-6 h-6 mr-4" />
+              AUTHENTICATE STAFF
             </Button>
 
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300"></div>
+                <div className="w-full border-t border-white/5"></div>
               </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">or</span>
+              <div className="relative flex justify-center">
+                <span className="px-6 bg-[#0B0118] text-blue-100/20 text-[10px] font-black uppercase tracking-[0.5em]">OR INITIALIZE REQUEST</span>
               </div>
             </div>
 
             <Button
               variant="outline"
               onClick={handleRequestAccess}
-              className="w-full h-12 text-lg"
+              className="w-full h-16 bg-white/5 border-white/10 hover:bg-white/10 text-white font-black uppercase tracking-[0.3em] text-[10px] rounded-2xl transition-all"
             >
-              Request Staff Access
+              REQUEST ACCESS PROTOCOL
             </Button>
 
-            <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <p className="text-sm text-blue-800">
-                <strong>For New Staff:</strong>
+            <div className="bg-blue-500/5 border border-blue-500/10 rounded-3xl p-8">
+              <p className="text-[10px] text-blue-400 font-black uppercase tracking-widest mb-4">
+                Onboarding Protocol:
               </p>
-              <ol className="text-sm text-blue-700 mt-2 space-y-1 list-decimal list-inside">
-                <li>Request staff access</li>
-                <li>Wait for admin approval</li>
-                <li>Receive invite email</li>
-                <li>Create your account with EXACT email</li>
-                <li>Come back here and login</li>
+              <ol className="text-[10px] text-blue-100/30 font-bold uppercase tracking-[0.15em] space-y-3">
+                <li className="flex items-center gap-3"><span className="w-5 h-5 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">1</span> Request administrative clearance</li>
+                <li className="flex items-center gap-3"><span className="w-5 h-5 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">2</span> Await Superuser validation</li>
+                <li className="flex items-center gap-3"><span className="w-5 h-5 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">3</span> Obtain unique invitation vector</li>
+                <li className="flex items-center gap-3"><span className="w-5 h-5 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">4</span> Configure node with verified ID</li>
+                <li className="flex items-center gap-3"><span className="w-5 h-5 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">5</span> Engage terminal uplink</li>
               </ol>
             </div>
           </CardContent>

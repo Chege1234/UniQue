@@ -112,36 +112,28 @@ export default function StudentTakeTicket() {
 
   if (activeTicket) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center p-4 overflow-y-auto">
-        <div
-          className="fixed inset-0 z-0"
-          style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2070)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat'
-          }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/90 via-slate-900/85 to-blue-800/90"></div>
-        </div>
-        <div className="w-full max-w-md relative z-10 my-auto">
+      <div className="fixed inset-0 flex items-center justify-center p-4 overflow-y-auto relative z-10">
+        <div className="w-full max-w-lg relative z-10 my-auto">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
           >
-            <Alert className="border-red-500 bg-red-50 mb-4">
-              <AlertCircle className="h-5 w-5 text-red-600" />
-              <AlertDescription className="text-red-800 font-medium">
-                You already have an active ticket. Please complete or cancel it before taking a new one.
-              </AlertDescription>
-            </Alert>
-            <Button
-              variant="outline"
-              className="w-full bg-white"
-              onClick={() => navigate(createPageUrl("StudentTicketView") + `?student=${studentNumber}`)}
-            >
-              View My Active Ticket
-            </Button>
+            <Card className="glass-card border-none p-10 text-center">
+              <div className="w-20 h-20 bg-red-500/20 border border-red-500/30 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-red-500/20">
+                <AlertCircle className="h-10 w-10 text-red-400" />
+              </div>
+              <h2 className="text-3xl font-black text-white tracking-tight mb-4">ACTIVE LOCK</h2>
+              <p className="text-blue-100/40 font-medium text-lg leading-relaxed mb-10">
+                You already have an active registration. Terminate existing session before initiating new request.
+              </p>
+              <Button
+                variant="outline"
+                className="w-full h-16 bg-white/5 border-white/10 hover:bg-white/10 text-white font-black uppercase tracking-[0.3em] text-sm rounded-2xl transition-all"
+                onClick={() => navigate(createPageUrl("StudentTicketView") + `?student=${studentNumber}`)}
+              >
+                VIEW ACTIVE TICKET
+              </Button>
+            </Card>
           </motion.div>
         </div>
       </div>
@@ -149,129 +141,114 @@ export default function StudentTakeTicket() {
   }
 
   return (
-    <div className="fixed inset-0 overflow-y-auto">
-      <div
-        className="fixed inset-0 z-0"
-        style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2070)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/90 via-slate-900/85 to-blue-800/90"></div>
-      </div>
-
-      <div className="relative z-10 min-h-full">
-        <div className="max-w-5xl mx-auto p-4 md:p-8 space-y-4 sm:space-y-6">
-          <div className="flex items-center gap-3 sm:gap-4">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => navigate(createPageUrl("StudentEntry"))}
-              className="bg-white/95 backdrop-blur-sm flex-shrink-0"
-            >
-              <ArrowLeft className="w-4 h-4" />
-            </Button>
-            <div className="min-w-0 flex-1">
-              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white truncate">Select Department</h1>
-              <p className="text-blue-100 mt-1 text-xs sm:text-sm md:text-base">Student: {studentNumber}</p>
+    <div className="min-h-screen relative z-10 px-4 py-12 md:py-20">
+      <div className="max-w-7xl mx-auto space-y-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
+          <div>
+            <div className="flex items-center gap-6 mb-4">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => navigate(createPageUrl("StudentEntry"))}
+                className="bg-white/5 border-white/10 hover:bg-white/10 text-white w-14 h-14 rounded-2xl transition-all active:scale-90"
+              >
+                <ArrowLeft className="w-6 h-6" />
+              </Button>
+              <div>
+                <h1 className="text-5xl font-black text-white tracking-tight">Select <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">Node</span></h1>
+                <p className="text-blue-100/40 font-bold uppercase tracking-[0.25em] text-sm mt-3 flex items-center gap-3">
+                  <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_10px_#22c55e]" />
+                  Authenticated Student: {studentNumber}
+                </p>
+              </div>
             </div>
           </div>
+        </div>
 
-          {!selectedDept ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {departments.map((dept, index) => {
-                const stats = getDepartmentStats(dept.id);
-                return (
-                  <DepartmentCard
-                    key={dept.id}
-                    department={dept}
-                    stats={stats}
-                    onSelect={handleSelectDepartment}
-                    delay={index * 0.1}
-                  />
-                );
-              })}
-            </div>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-            >
-              <Card className="border-none shadow-2xl bg-white/95 backdrop-blur-sm">
-                <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4 sm:p-6 md:p-8">
-                  <CardTitle className="text-lg sm:text-xl md:text-2xl">Confirm Your Ticket</CardTitle>
-                  <CardDescription className="text-blue-100 text-sm sm:text-base">
-                    Review the details before getting your ticket
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="p-4 sm:p-6 md:p-8">
-                  <div className="space-y-4 sm:space-y-6">
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-4 sm:p-6 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl">
-                      <div className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-${selectedDept.color}-500 rounded-xl flex items-center justify-center text-white text-lg sm:text-xl md:text-2xl font-bold shadow-lg flex-shrink-0`}>
-                        {selectedDept.name[0]}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 break-words">{selectedDept.name}</h3>
-                        <p className="text-gray-600 text-xs sm:text-sm md:text-base mt-1">{selectedDept.description}</p>
-                      </div>
+        {!selectedDept ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {departments.map((dept, index) => {
+              const stats = getDepartmentStats(dept.id);
+              return (
+                <DepartmentCard
+                  key={dept.id}
+                  department={dept}
+                  stats={stats}
+                  onSelect={handleSelectDepartment}
+                  delay={index * 0.1}
+                />
+              );
+            })}
+          </div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+          >
+            <Card className="glass-card border-none overflow-hidden relative group max-w-3xl mx-auto">
+              <CardHeader className="text-center p-12 border-b border-white/5">
+                <p className="text-[10px] font-black text-purple-400 uppercase tracking-[0.3em] mb-4">Request Initiation</p>
+                <CardTitle className="text-4xl font-black text-white tracking-tight leading-none uppercase">Confirm Ticket</CardTitle>
+              </CardHeader>
+              <CardContent className="p-12">
+                <div className="space-y-10">
+                  <div className="flex items-center gap-8 p-10 bg-white/5 rounded-3xl border border-white/10">
+                    <div className={`w-20 h-20 bg-gradient-to-br from-purple-600 to-blue-600 rounded-3xl flex items-center justify-center text-white text-3xl font-black shadow-2xl flex-shrink-0`}>
+                      {selectedDept.name[0]}
                     </div>
-
-                    <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                      <div className="p-3 sm:p-4 bg-gray-50 rounded-lg">
-                        <div className="flex items-center gap-1 sm:gap-2 mb-1 sm:mb-2">
-                          <Users className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 flex-shrink-0" />
-                          <span className="text-[10px] sm:text-xs md:text-sm text-gray-600">Waiting</span>
-                        </div>
-                        <p className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">
-                          {getDepartmentStats(selectedDept.id).waiting}
-                        </p>
-                      </div>
-                      <div className="p-3 sm:p-4 bg-gray-50 rounded-lg">
-                        <div className="flex items-center gap-1 sm:gap-2 mb-1 sm:mb-2">
-                          <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 flex-shrink-0" />
-                          <span className="text-[10px] sm:text-xs md:text-sm text-gray-600">Est. Wait</span>
-                        </div>
-                        <p className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">
-                          {getDepartmentStats(selectedDept.id).estimatedWait} min
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                      <Button
-                        variant="outline"
-                        className="flex-1 h-10 sm:h-11 md:h-12 text-sm sm:text-base"
-                        onClick={() => setSelectedDept(null)}
-                        disabled={createTicketMutation.isPending}
-                      >
-                        Go Back
-                      </Button>
-                      <Button
-                        className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 h-10 sm:h-11 md:h-12 text-sm sm:text-base"
-                        onClick={handleConfirm}
-                        disabled={createTicketMutation.isPending}
-                      >
-                        {createTicketMutation.isPending ? (
-                          <>
-                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                            Creating...
-                          </>
-                        ) : (
-                          <>
-                            <CheckCircle className="w-4 h-4 mr-2" />
-                            Confirm
-                          </>
-                        )}
-                      </Button>
+                    <div className="flex-1">
+                      <h3 className="text-3xl font-black text-white tracking-tight uppercase">{selectedDept.name}</h3>
+                      <p className="text-blue-100/30 font-bold text-xs uppercase tracking-widest mt-2">{selectedDept.description}</p>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          )}
-        </div>
+
+                  <div className="grid grid-cols-2 gap-8">
+                    <div className="p-8 bg-white/5 rounded-3xl border border-white/5 flex flex-col items-center">
+                      <Users className="w-8 h-8 text-purple-400 mb-3 opacity-30" />
+                      <span className="text-[10px] font-black text-blue-100/20 uppercase tracking-widest mb-2">Queue Load</span>
+                      <p className="text-4xl font-black text-white">{getDepartmentStats(selectedDept.id).waiting}</p>
+                    </div>
+                    <div className="p-8 bg-white/5 rounded-3xl border border-white/5 flex flex-col items-center">
+                      <Clock className="w-8 h-8 text-blue-400 mb-3 opacity-30" />
+                      <span className="text-[10px] font-black text-blue-100/20 uppercase tracking-widest mb-2">Est. Latency</span>
+                      <p className="text-4xl font-black text-white">
+                        {getDepartmentStats(selectedDept.id).estimatedWait}<span className="text-sm ml-1 text-blue-400">m</span>
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-6 pt-4">
+                    <Button
+                      variant="ghost"
+                      className="flex-1 h-20 text-blue-100/20 hover:text-white hover:bg-white/5 font-black uppercase tracking-[0.3em] text-[10px] rounded-2xl transition-all"
+                      onClick={() => setSelectedDept(null)}
+                      disabled={createTicketMutation.isPending}
+                    >
+                      ABORT
+                    </Button>
+                    <Button
+                      className="flex-[2] bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 h-20 text-white font-black uppercase tracking-[0.3em] text-sm rounded-2xl shadow-2xl shadow-purple-900/40 transition-all active:scale-[0.98]"
+                      onClick={handleConfirm}
+                      disabled={createTicketMutation.isPending}
+                    >
+                      {createTicketMutation.isPending ? (
+                        <>
+                          <Loader2 className="w-6 h-6 mr-4 animate-spin" />
+                          PROCESSING...
+                        </>
+                      ) : (
+                        <>
+                          <CheckCircle className="w-6 h-6 mr-4" />
+                          CONFIRM ENGAGEMENT
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
       </div>
     </div>
   );

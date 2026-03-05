@@ -130,8 +130,8 @@ export default function Analytics() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+      <div className="flex items-center justify-center min-h-[50vh] relative z-10">
+        <Loader2 className="h-10 w-10 animate-spin text-purple-500" />
       </div>
     );
   }
@@ -140,31 +140,40 @@ export default function Analytics() {
     return null;
   }
 
+  const statusColors = {
+    'Completed': '#8B5CF6',
+    'Waiting': '#3B82F6',
+    'In Progress': '#A78BFA',
+    'Cancelled': '#EF4444'
+  };
+
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Analytics Dashboard</h1>
-        <p className="text-gray-600 mt-1">Comprehensive insights into queue performance</p>
+    <div className="space-y-12 relative z-10 pb-20">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+        <div>
+          <h1 className="text-5xl font-black text-white tracking-tight uppercase">Intelligence <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Engine</span></h1>
+          <p className="text-blue-100/30 font-medium text-lg mt-3 uppercase tracking-widest text-balance">Deep-layer telemetric analysis of network throughput</p>
+        </div>
       </div>
 
       {/* Key Metrics */}
-      <div className="grid md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {metrics.map((metric, index) => (
           <motion.div
             key={metric.title}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: index * 0.1 }}
           >
-            <Card className="border-none shadow-lg">
-              <CardContent className="p-6">
+            <Card className="glass-card border-none overflow-hidden relative group">
+              <CardContent className="p-8">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600 mb-1">{metric.title}</p>
-                    <p className="text-2xl font-bold text-gray-900">{metric.value}</p>
+                    <p className="text-[10px] font-black text-blue-400 uppercase tracking-[0.3em] mb-3">{metric.title}</p>
+                    <p className="text-4xl font-black text-white tracking-tighter">{metric.value}</p>
                   </div>
-                  <div className={`w-12 h-12 ${metric.bgColor} rounded-xl flex items-center justify-center`}>
-                    <metric.icon className={`w-6 h-6 ${metric.color}`} />
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center bg-white/5 border border-white/10 group-hover:scale-110 transition-transform duration-500 shadow-2xl shadow-purple-500/10`}>
+                    <metric.icon className={`w-6 h-6 text-purple-400`} />
                   </div>
                 </div>
               </CardContent>
@@ -173,73 +182,120 @@ export default function Analytics() {
         ))}
       </div>
 
-      {/* Charts */}
-      <div className="grid lg:grid-cols-2 gap-6">
+      {/* Charts Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Weekly Trend */}
-        <Card className="border-none shadow-lg">
-          <CardHeader>
-            <CardTitle>Weekly Ticket Trend</CardTitle>
+        <Card className="glass-card border-none overflow-hidden group">
+          <CardHeader className="p-8 border-b border-white/5 bg-white/5">
+            <CardTitle className="text-[10px] font-black text-white uppercase tracking-[0.4em]">Temporal Flux Log</CardTitle>
           </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={last7Days}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey="tickets" stroke="#3B82F6" strokeWidth={2} name="Total Tickets" />
-                <Line type="monotone" dataKey="completed" stroke="#10B981" strokeWidth={2} name="Completed" />
-              </LineChart>
-            </ResponsiveContainer>
+          <CardContent className="p-10">
+            <div className="h-[350px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={last7Days}>
+                  <defs>
+                    <linearGradient id="lineGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.8} />
+                      <stop offset="95%" stopColor="#3B82F6" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                  <XAxis
+                    dataKey="date"
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 10, fontWeight: 800 }}
+                    dy={10}
+                  />
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 10, fontWeight: 800 }}
+                  />
+                  <Tooltip
+                    contentStyle={{ backgroundColor: '#0B0118', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px', textTransform: 'uppercase', fontSize: '10px', fontWeight: '900' }}
+                    itemStyle={{ color: '#fff' }}
+                  />
+                  <Line type="monotone" dataKey="tickets" stroke="#3B82F6" strokeWidth={4} dot={{ r: 6, fill: '#3B82F6', strokeWidth: 0 }} activeDot={{ r: 8, strokeWidth: 0 }} name="AGGREGATE" />
+                  <Line type="monotone" dataKey="completed" stroke="#8B5CF6" strokeWidth={4} dot={{ r: 6, fill: '#8B5CF6', strokeWidth: 0 }} activeDot={{ r: 8, strokeWidth: 0 }} name="RESOLVED" />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
           </CardContent>
         </Card>
 
         {/* Status Distribution */}
-        <Card className="border-none shadow-lg">
-          <CardHeader>
-            <CardTitle>Ticket Status Distribution</CardTitle>
+        <Card className="glass-card border-none overflow-hidden group">
+          <CardHeader className="p-8 border-b border-white/5 bg-white/5">
+            <CardTitle className="text-[10px] font-black text-white uppercase tracking-[0.4em]">Node State Distribution</CardTitle>
           </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={statusDistribution}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                  outerRadius={100}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {statusDistribution.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
+          <CardContent className="p-10 flex flex-col items-center">
+            <div className="h-[350px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={statusDistribution}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={80}
+                    outerRadius={120}
+                    paddingAngle={8}
+                    dataKey="value"
+                  >
+                    {statusDistribution.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} stroke="none" />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{ backgroundColor: '#0B0118', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px', textTransform: 'uppercase', fontSize: '10px', fontWeight: '900' }}
+                  />
+                  <Legend
+                    verticalAlign="bottom"
+                    height={36}
+                    formatter={(value) => <span className="text-[10px] font-black text-blue-100/30 uppercase tracking-widest ml-2">{value}</span>}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
           </CardContent>
         </Card>
 
         {/* Department Performance */}
-        <Card className="border-none shadow-lg lg:col-span-2">
-          <CardHeader>
-            <CardTitle>Department Performance</CardTitle>
+        <Card className="glass-card border-none overflow-hidden group lg:col-span-2">
+          <CardHeader className="p-8 border-b border-white/5 bg-white/5">
+            <CardTitle className="text-[10px] font-black text-white uppercase tracking-[0.4em]">Sector Performance matrix</CardTitle>
           </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={departmentStats}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="tickets" fill="#3B82F6" name="Total Tickets" />
-                <Bar dataKey="completed" fill="#10B981" name="Completed" />
-              </BarChart>
-            </ResponsiveContainer>
+          <CardContent className="p-10">
+            <div className="h-[400px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={departmentStats} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.8} />
+                      <stop offset="95%" stopColor="#3B82F6" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                  <XAxis
+                    dataKey="name"
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 10, fontWeight: 800 }}
+                    dy={10}
+                  />
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 10, fontWeight: 800 }}
+                  />
+                  <Tooltip
+                    contentStyle={{ backgroundColor: '#0B0118', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px', textTransform: 'uppercase', fontSize: '10px', fontWeight: '900' }}
+                  />
+                  <Bar dataKey="tickets" fill="url(#barGradient)" radius={[8, 8, 0, 0]} name="TOTAL TRANSMISSIONS" />
+                  <Bar dataKey="completed" fill="#8B5CF6" radius={[8, 8, 0, 0]} name="RESOLVED" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </CardContent>
         </Card>
       </div>

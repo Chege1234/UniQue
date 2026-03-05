@@ -70,45 +70,45 @@ export default function Login() {
 
     if (isCheckingSession) {
         return (
-            <div className="flex items-center justify-center min-h-screen bg-slate-50">
-                <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+            <div className="flex items-center justify-center min-h-[60vh]">
+                <Loader2 className="h-10 w-10 animate-spin text-purple-500" />
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 flex items-center justify-center p-4">
+        <div className="min-h-[80vh] flex items-center justify-center p-4 relative z-10">
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="w-full max-w-md"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="w-full max-w-lg"
             >
-                <Card className="shadow-2xl border-none overflow-hidden">
-                    <CardHeader className="text-center bg-gradient-to-r from-blue-600 to-blue-700 text-white p-8">
-                        <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4 backdrop-blur-sm border border-white/30">
-                            <Shield className="w-8 h-8 text-white" />
+                <Card className="glass-card border-none overflow-hidden group">
+                    <CardHeader className="text-center pb-8 border-b border-white/5">
+                        <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-blue-400 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-blue-500/20 group-hover:scale-110 transition-transform duration-500">
+                            <Shield className="w-10 h-10 text-white" />
                         </div>
-                        <CardTitle className="text-3xl font-bold tracking-tight">Staff Access</CardTitle>
-                        <CardDescription className="text-blue-100 mt-2 text-base">
-                            Sign in to manage the university queue
+                        <CardTitle className="text-4xl font-black text-white tracking-tight">Staff <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-200">Terminal</span></CardTitle>
+                        <CardDescription className="text-blue-100/40 mt-2 text-lg font-medium">
+                            Authenticate to access the central management node.
                         </CardDescription>
                     </CardHeader>
-                    <CardContent className="p-8 bg-white">
+                    <CardContent className="p-10">
                         {error && (
                             <motion.div
-                                initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: 'auto' }}
-                                className="mb-6 p-4 bg-red-50 border border-red-100 rounded-xl flex items-start"
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="mb-8 p-6 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-start"
                             >
-                                <AlertCircle className="w-5 h-5 text-red-500 mr-3 mt-0.5 shrink-0" />
-                                <p className="text-sm text-red-700 font-medium">{error}</p>
+                                <AlertCircle className="w-6 h-6 text-red-400 mr-4 shrink-0" />
+                                <p className="text-sm text-red-200 font-bold uppercase tracking-wider">{error}</p>
                             </motion.div>
                         )}
 
-                        <form onSubmit={handleLogin} className="space-y-6">
-                            <div className="space-y-2">
-                                <Label htmlFor="email" className="text-sm font-semibold text-gray-700 ml-1">
-                                    University Email
+                        <form onSubmit={handleLogin} className="space-y-8">
+                            <div className="space-y-3">
+                                <Label htmlFor="email" className="text-[10px] font-black text-blue-400 uppercase tracking-[0.25em] ml-1">
+                                    Access Protocol ID
                                 </Label>
                                 <Input
                                     id="email"
@@ -117,16 +117,14 @@ export default function Login() {
                                     placeholder="name@university.edu"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="h-12 rounded-xl border-gray-200 focus:ring-blue-500 focus:border-blue-500 transition-all text-base"
+                                    className="h-14 bg-white/5 border-white/10 text-white placeholder:text-white/10 rounded-2xl focus:ring-blue-500/50 focus:border-blue-500/50 text-lg font-bold"
                                 />
                             </div>
 
-                            <div className="space-y-2">
-                                <div className="flex justify-between items-center ml-1">
-                                    <Label htmlFor="password" title="password" className="text-sm font-semibold text-gray-700">
-                                        Password
-                                    </Label>
-                                </div>
+                            <div className="space-y-3">
+                                <Label htmlFor="password" title="password" className="text-[10px] font-black text-blue-400 uppercase tracking-[0.25em] ml-1">
+                                    Encrypted Key
+                                </Label>
                                 <Input
                                     id="password"
                                     type="password"
@@ -134,29 +132,29 @@ export default function Login() {
                                     placeholder="••••••••"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="h-12 rounded-xl border-gray-200 focus:ring-blue-500 focus:border-blue-500 transition-all text-base"
+                                    className="h-14 bg-white/5 border-white/10 text-white placeholder:text-white/10 rounded-2xl focus:ring-blue-500/50 focus:border-blue-500/50 text-lg font-bold"
                                 />
                             </div>
 
                             <Button
                                 type="submit"
                                 disabled={isLoading || !email || !password}
-                                className="w-full h-12 text-lg font-bold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg shadow-blue-200 rounded-xl transition-all active:scale-[0.98] disabled:opacity-70 disabled:active:scale-100"
+                                className="w-full h-16 bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-500 hover:to-blue-300 text-white font-black uppercase tracking-[0.3em] text-sm rounded-2xl shadow-2xl shadow-blue-500/20 transition-all active:scale-[0.98]"
                             >
                                 {isLoading ? (
                                     <>
                                         <Loader2 className="w-5 h-5 mr-3 animate-spin" />
-                                        Verifying...
+                                        VERIFYING...
                                     </>
                                 ) : (
-                                    'Sign In'
+                                    'AUTHENTICATE'
                                 )}
                             </Button>
                         </form>
                     </CardContent>
                 </Card>
-                <p className="text-center mt-8 text-gray-500 text-sm">
-                    Protected by Supabase Authentication
+                <p className="text-center mt-10 text-blue-100/20 text-xs font-bold uppercase tracking-widest">
+                    SECURE NODE ACCESS · SUPABASE AUTH v3
                 </p>
             </motion.div>
         </div>

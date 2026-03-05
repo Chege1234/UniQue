@@ -9,11 +9,16 @@ import { motion } from "framer-motion";
 export default function WaitingQueue({ tickets, onCallNext, isCallingNext }) {
   if (tickets.length === 0) {
     return (
-      <Card className="border-2 border-dashed border-gray-300 bg-gray-50">
-        <CardContent className="p-8 sm:p-12 text-center">
-          <Clock className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg sm:text-xl font-semibold text-gray-700 mb-2">No Students Waiting</h3>
-          <p className="text-sm sm:text-base text-gray-600">The queue is currently empty</p>
+      <Card className="glass-card border-none">
+        <CardContent className="p-16 text-center">
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+          >
+            <Clock className="w-16 h-16 text-blue-300/20 mx-auto mb-6" />
+            <h3 className="text-xl font-bold text-white mb-2">Node is Idle</h3>
+            <p className="text-blue-100/40 font-medium">No students are currently in the buffer</p>
+          </motion.div>
         </CardContent>
       </Card>
     );
@@ -21,15 +26,21 @@ export default function WaitingQueue({ tickets, onCallNext, isCallingNext }) {
 
   return (
     <div className="space-y-4 sm:space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold text-gray-900">Waiting Queue ({tickets.length})</h2>
+      <div className="flex justify-between items-end mb-8">
+        <div>
+          <h2 className="text-xl font-black text-white uppercase tracking-[0.2em] flex items-center gap-3">
+            <span className="w-2 h-2 rounded-full bg-purple-500 shadow-[0_0_10px_#a855f7]" />
+            Wait List
+          </h2>
+          <p className="text-blue-100/30 text-xs font-bold mt-1 uppercase tracking-widest">{tickets.length} Registered Nodes</p>
+        </div>
         <Button
           onClick={onCallNext}
           disabled={isCallingNext || tickets.length === 0}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-medium"
+          className="bg-white/10 hover:bg-white/20 border border-white/10 text-white font-black uppercase tracking-widest px-8 py-6 rounded-2xl transition-all duration-300 group"
         >
-          {isCallingNext ? "Calling..." : "Call Next Ticket"}
-          {!isCallingNext && <Play className="w-4 h-4 ml-2" />}
+          {isCallingNext ? "ENGAGING..." : "CALL NEXT"}
+          {!isCallingNext && <Play className="w-4 h-4 ml-3 group-hover:translate-x-1 transition-transform" />}
         </Button>
       </div>
 
@@ -41,22 +52,22 @@ export default function WaitingQueue({ tickets, onCallNext, isCallingNext }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05 }}
           >
-            <Card className="border-none shadow-md hover:shadow-lg transition-shadow">
-              <CardContent className="p-4 sm:p-6">
+            <Card className="glass-card border-none hover:bg-white/5 transition-all duration-300 group">
+              <CardContent className="p-6">
                 <div className="flex flex-col gap-4">
-                  <div className="flex items-start gap-3 sm:gap-4">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-blue-600 font-bold text-base sm:text-lg">#{index + 1}</span>
+                  <div className="flex items-center gap-6">
+                    <div className="w-12 h-12 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:border-purple-500/50 transition-colors">
+                      <span className="text-purple-400 font-black text-lg">0{index + 1}</span>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2">
-                        <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">{ticket.student_name}</h3>
-                        <Badge className="bg-blue-500 w-fit text-xs sm:text-sm">{ticket.ticket_number}</Badge>
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-1">
+                        <h3 className="text-lg font-black text-white tracking-tight">{ticket.student_name}</h3>
+                        <Badge className="bg-purple-500/20 text-purple-300 border border-purple-500/30 font-bold tracking-widest uppercase py-0.5">{ticket.ticket_number}</Badge>
                       </div>
-                      <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-4 text-xs sm:text-sm text-gray-600">
-                        <div className="flex items-center gap-1">
-                          <User className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
-                          <span className="truncate">{ticket.student_email || ticket.student_id}</span>
+                      <div className="flex flex-col sm:flex-row sm:flex-wrap gap-4 text-[10px] font-bold text-blue-100/30 uppercase tracking-[0.15em]">
+                        <div className="flex items-center gap-2">
+                          <User className="w-3 h-3 text-purple-500/50" />
+                          <span>{ticket.student_email || ticket.student_id}</span>
                         </div>
                         <div className="flex items-center gap-1">
                           <Clock className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />

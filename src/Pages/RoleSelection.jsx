@@ -57,77 +57,82 @@ export default function RoleSelection() {
 
     if (!user) {
         return (
-            <div className="flex items-center justify-center min-h-screen">
-                <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+            <div className="flex items-center justify-center min-h-[60vh]">
+                <Loader2 className="h-10 w-10 animate-spin text-purple-500" />
             </div>
         );
     }
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 to-blue-100 p-4">
-            <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="w-full">
-                <Card className="w-full max-w-lg mx-auto shadow-2xl">
-                    <CardHeader className="text-center">
-                        <User className="mx-auto h-12 w-12 text-blue-500" />
-                        <CardTitle className="text-2xl mt-4">Welcome, {user.full_name}!</CardTitle>
-                        <CardDescription>Please complete your profile by selecting your role.</CardDescription>
+        <div className="flex items-center justify-center min-h-[80vh] px-4 relative z-10">
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="w-full max-w-2xl">
+                <Card className="glass-card border-none overflow-hidden group">
+                    <CardHeader className="text-center pb-8 border-b border-white/5">
+                        <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-purple-500/20 group-hover:scale-110 transition-transform duration-500">
+                            <User className="h-10 w-10 text-white" />
+                        </div>
+                        <CardTitle className="text-4xl font-black text-white tracking-tight">Access <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">Granted</span></CardTitle>
+                        <CardDescription className="text-blue-100/40 font-medium text-lg mt-2">Welcome back, {user.full_name}. Initialize your session parameters.</CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-6">
-                        <div className="grid grid-cols-2 gap-4">
-                            <Card 
-                                className={`cursor-pointer transition-all text-center ${selectedRole === 'student' ? 'border-blue-500 ring-2 ring-blue-500' : 'hover:border-gray-400'}`}
+                    <CardContent className="p-10 space-y-10">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <Card
+                                className={`cursor-pointer transition-all duration-300 border-none relative overflow-hidden group ${selectedRole === 'student' ? 'bg-purple-600/20 ring-2 ring-purple-500 shadow-[0_0_30px_rgba(168,85,247,0.2)]' : 'bg-white/5 hover:bg-white/10 border border-white/5'}`}
                                 onClick={() => setSelectedRole('student')}
                             >
-                                <CardContent className="flex flex-col items-center justify-center p-6">
-                                    <GraduationCap className="h-8 w-8 mb-2 text-blue-600" />
-                                    <p className="font-semibold">I am a Student</p>
+                                <CardContent className="flex flex-col items-center justify-center p-8 relative z-10">
+                                    <GraduationCap className={`h-12 w-12 mb-4 transition-colors duration-300 ${selectedRole === 'student' ? 'text-purple-400' : 'text-blue-100/20'}`} />
+                                    <p className={`font-black uppercase tracking-[0.2em] text-xs ${selectedRole === 'student' ? 'text-white' : 'text-blue-100/40'}`}>Student Node</p>
                                 </CardContent>
+                                {selectedRole === 'student' && <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent animate-pulse" />}
                             </Card>
-                            <Card 
-                                className={`cursor-pointer transition-all text-center ${selectedRole === 'staff' ? 'border-blue-500 ring-2 ring-blue-500' : 'hover:border-gray-400'}`}
+                            <Card
+                                className={`cursor-pointer transition-all duration-300 border-none relative overflow-hidden group ${selectedRole === 'staff' ? 'bg-blue-600/20 ring-2 ring-blue-500 shadow-[0_0_30px_rgba(59,130,246,0.2)]' : 'bg-white/5 hover:bg-white/10 border border-white/5'}`}
                                 onClick={() => setSelectedRole('staff')}
                             >
-                                <CardContent className="flex flex-col items-center justify-center p-6">
-                                    <Briefcase className="h-8 w-8 mb-2 text-green-600" />
-                                    <p className="font-semibold">I am Staff</p>
+                                <CardContent className="flex flex-col items-center justify-center p-8 relative z-10">
+                                    <Briefcase className={`h-12 w-12 mb-4 transition-colors duration-300 ${selectedRole === 'staff' ? 'text-blue-400' : 'text-blue-100/20'}`} />
+                                    <p className={`font-black uppercase tracking-[0.2em] text-xs ${selectedRole === 'staff' ? 'text-white' : 'text-blue-100/40'}`}>Staff Terminal</p>
                                 </CardContent>
+                                {selectedRole === 'staff' && <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent animate-pulse" />}
                             </Card>
                         </div>
 
                         {selectedRole === 'student' && (
-                            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="space-y-2">
-                                <Label htmlFor="studentId">Student ID</Label>
-                                <Input 
-                                    id="studentId" 
-                                    placeholder="Enter your student ID"
+                            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
+                                <Label htmlFor="studentId" className="text-[10px] font-black text-purple-400 uppercase tracking-[0.25em] ml-1">Identification Key</Label>
+                                <Input
+                                    id="studentId"
+                                    placeholder="Enter 8-digit identification..."
                                     value={studentId}
                                     onChange={(e) => setStudentId(e.target.value)}
+                                    className="h-14 bg-white/5 border-white/10 text-white placeholder:text-white/10 rounded-2xl focus:ring-purple-500/50 focus:border-purple-500/50 text-lg font-bold tracking-widest"
                                 />
                             </motion.div>
                         )}
 
                         {selectedRole === 'staff' && (
-                            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="space-y-2">
-                                <Label htmlFor="department">Select Your Department</Label>
+                            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
+                                <Label htmlFor="department" className="text-[10px] font-black text-blue-400 uppercase tracking-[0.25em] ml-1">Assigned Department</Label>
                                 <Select onValueChange={setStaffDepartment} value={staffDepartment}>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Choose a department..." />
+                                    <SelectTrigger className="h-14 bg-white/5 border-white/10 text-white rounded-2xl focus:ring-blue-500/50 focus:border-blue-500/50 text-lg font-bold">
+                                        <SelectValue placeholder="Select network node..." />
                                     </SelectTrigger>
-                                    <SelectContent>
+                                    <SelectContent className="glass-card border-white/10 text-white">
                                         {departments.map(dept => (
-                                            <SelectItem key={dept.id} value={dept.name}>{dept.name}</SelectItem>
+                                            <SelectItem key={dept.id} value={dept.name} className="hover:bg-white/5 cursor-pointer">{dept.name}</SelectItem>
                                         ))}
                                     </SelectContent>
                                 </Select>
                             </motion.div>
                         )}
-                        
-                        <Button 
-                            onClick={handleSubmit} 
+
+                        <Button
+                            onClick={handleSubmit}
                             disabled={!selectedRole || (selectedRole === 'student' && !studentId) || (selectedRole === 'staff' && !staffDepartment) || updateUserMutation.isPending}
-                            className="w-full bg-blue-600 hover:bg-blue-700"
+                            className="w-full h-16 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-black uppercase tracking-[0.3em] text-sm rounded-2xl shadow-2xl shadow-purple-500/20 transition-all active:scale-[0.98]"
                         >
-                            {updateUserMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save and Continue'}
+                            {updateUserMutation.isPending ? <Loader2 className="h-5 w-5 animate-spin mr-3" /> : 'INITIALIZE SESSION'}
                         </Button>
                     </CardContent>
                 </Card>
