@@ -30,7 +30,8 @@ export default function StaffDashboard() {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedDepartment, setSelectedDepartment] = useState(null);
+  // Always store the selected department as a string ID so it works reliably with the Select component
+  const [selectedDepartment, setSelectedDepartment] = useState("");
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -72,12 +73,12 @@ export default function StaffDashboard() {
     if (user?.department && departments.length > 0 && !selectedDepartment) {
       const dept = departments.find(d => d.name === user.department || d.id === user.department);
       if (dept) {
-        setSelectedDepartment(dept.id);
+        setSelectedDepartment(String(dept.id));
       }
     }
   }, [user, departments, selectedDepartment]);
 
-  const activeDepartmentId = selectedDepartment;
+  const activeDepartmentId = selectedDepartment || null;
   const activeDepartmentName = departments.find(d => d.id === activeDepartmentId)?.name;
 
   const { data: allTickets = [] } = useQuery({
@@ -255,13 +256,20 @@ export default function StaffDashboard() {
               <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center">
                 <Building2 className="w-5 h-5 text-[#0d6cf2]" />
               </div>
-              <Select value={selectedDepartment || ""} onValueChange={setSelectedDepartment}>
+              <Select
+                value={selectedDepartment}
+                onValueChange={(value) => setSelectedDepartment(value)}
+              >
                 <SelectTrigger className="w-full sm:w-64 bg-transparent border-none text-white font-bold h-10 focus:ring-0">
                   <SelectValue placeholder="Network Node..." />
                 </SelectTrigger>
                 <SelectContent className="glass-card border-white/10 text-white">
                   {departments.map(dept => (
-                    <SelectItem key={dept.id} value={dept.id} className="hover:bg-white/5 cursor-pointer">
+                    <SelectItem
+                      key={dept.id}
+                      value={String(dept.id)}
+                      className="hover:bg-white/5 cursor-pointer"
+                    >
                       {dept.name}
                     </SelectItem>
                   ))}
@@ -275,7 +283,7 @@ export default function StaffDashboard() {
                 className="text-[10px] text-[#0d6cf2] font-black uppercase tracking-widest hover:bg-white/5"
                 onClick={() => {
                   const dept = departments.find(d => d.name === user.department || d.id === user.department);
-                  if (dept) setSelectedDepartment(dept.id);
+                  if (dept) setSelectedDepartment(String(dept.id));
                 }}
               >
                 Reset to {user.department}
