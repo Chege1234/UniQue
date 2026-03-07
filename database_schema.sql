@@ -93,3 +93,55 @@ create table public.staff_requests (
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   created_date timestamp with time zone default timezone('utc'::text, now()) not null
 );
+
+-- 5. Performance Indexes
+create index if not exists idx_queue_tickets_department_id on public.queue_tickets(department_id);
+create index if not exists idx_queue_tickets_status on public.queue_tickets(status);
+create index if not exists idx_queue_tickets_student_email on public.queue_tickets(student_email);
+create index if not exists idx_queue_tickets_created_date on public.queue_tickets(created_date desc);
+create index if not exists idx_queue_tickets_dept_status on public.queue_tickets(department_id, status);
+
+-- 6. Row Level Security
+
+-- Enable RLS for queue_tickets
+alter table public.queue_tickets enable row level security;
+
+create policy "Students can view own tickets" on public.queue_tickets
+  for select using (student_email = auth.email());
+
+create policy "Staff can view department tickets" on public.queue_tickets
+  for select using (
+    exists (
+      select 1 from public.profiles
+      where id = auth.uid()
+      and (role = 'staff' or role = 'admin')
+    )
+  );
+
+create policy "Staff can update tickets" on public.queue_tickets
+  for update using (
+    exists (
+      select 1 from public.profiles
+      where id = auth.uid()
+      and (role = 'staff' or role = 'admin')
+    )
+  );
+
+create policy "Anyone can create tickets" on public.queue_tickets
+  for insert with check (true);
+
+-- Enable RLS for departments
+alter table public.departments enable row level security;
+
+create policy "Departments are publicly readable" on public.departments
+  for select using (true);
+
+create policy "Admins can manage departments" on public.departments
+  for all using (
+    exists (
+      select 1 from public.profiles
+      where id = auth.uid()
+      and role = 'admin'
+    )
+  );
+

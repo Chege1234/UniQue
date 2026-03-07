@@ -50,7 +50,10 @@ export const base44 = {
         Department: {
             list: async (orderBy) => {
                 const { data, error } = await applyOrder(supabase.from('departments').select('*'), orderBy);
-                if (error) console.error(error);
+                if (error) {
+                    console.error('Failed to fetch departments:', error);
+                    throw new Error(`Failed to fetch departments: ${error.message}`);
+                }
                 return data || [];
             },
             filter: async (filters, orderBy) => {
@@ -59,14 +62,20 @@ export const base44 = {
                     query = query.eq(key, value);
                 }
                 const { data, error } = await applyOrder(query, orderBy);
-                if (error) console.error(error);
+                if (error) {
+                    console.error('Failed to filter departments:', error);
+                    throw new Error(`Failed to filter departments: ${error.message}`);
+                }
                 return data || [];
             }
         },
         QueueTicket: {
             list: async (orderBy) => {
                 const { data, error } = await applyOrder(supabase.from('queue_tickets').select('*'), orderBy);
-                if (error) console.error(error);
+                if (error) {
+                    console.error('Failed to fetch queue tickets:', error);
+                    throw new Error(`Failed to fetch queue tickets: ${error.message}`);
+                }
                 return data || [];
             },
             filter: async (filters, orderBy) => {
@@ -75,7 +84,10 @@ export const base44 = {
                     query = query.eq(key, value);
                 }
                 const { data, error } = await applyOrder(query, orderBy);
-                if (error) console.error(error);
+                if (error) {
+                    console.error('Failed to filter queue tickets:', error);
+                    throw new Error(`Failed to filter queue tickets: ${error.message}`);
+                }
                 return data || [];
             },
             create: async (payload) => {
@@ -112,14 +124,20 @@ export const base44 = {
         User: {
             list: async (orderBy) => {
                 const { data, error } = await applyOrder(supabase.from('profiles').select('*'), orderBy);
-                if (error) console.error(error);
+                if (error) {
+                    console.error('Failed to fetch users:', error);
+                    throw new Error(`Failed to fetch users: ${error.message}`);
+                }
                 return data || [];
             }
         },
         StaffRequest: {
             list: async (orderBy) => {
                 const { data, error } = await applyOrder(supabase.from('staff_requests').select('*'), orderBy);
-                if (error) console.error(error);
+                if (error) {
+                    console.error('Failed to fetch staff requests:', error);
+                    throw new Error(`Failed to fetch staff requests: ${error.message}`);
+                }
                 return data || [];
             },
             create: async (payload) => {

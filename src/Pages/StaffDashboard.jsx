@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { toast } from "sonner";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
@@ -127,7 +128,7 @@ export default function StaffDashboard() {
     },
     onError: (error) => {
       console.error("Call next error:", error);
-      alert(`System Error: ${error.message || "Failed to call next ticket"}`);
+      toast.error(error.message || 'Failed to call next ticket');
     }
   });
 
@@ -144,7 +145,7 @@ export default function StaffDashboard() {
     },
     onError: (error) => {
       console.error("Mark served error:", error);
-      alert(`System Error: ${error.message || "Failed to mark ticket as served"}`);
+      toast.error(error.message || 'Failed to mark ticket as served');
     }
   });
 
@@ -159,7 +160,7 @@ export default function StaffDashboard() {
     },
     onError: (error) => {
       console.error("Skip ticket error:", error);
-      alert(`System Error: ${error.message || "Failed to terminate session"}`);
+      toast.error(error.message || 'Failed to terminate session');
     }
   });
 
