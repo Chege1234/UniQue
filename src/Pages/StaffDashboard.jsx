@@ -252,42 +252,50 @@ export default function StaffDashboard() {
                 👑 Authority Override
               </Badge>
             )}
-            <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-2xl p-1 pr-4">
-              <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center">
-                <Building2 className="w-5 h-5 text-[#0d6cf2]" />
+
+            {/* Current Department Display with Dropdown */}
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-slate-400 font-medium uppercase tracking-wider">
+                Serving:
+              </span>
+              <div className="relative">
+                <Select value={selectedDepartment || ""} onValueChange={setSelectedDepartment}>
+                  <SelectTrigger className="bg-white/10 border border-white/20 hover:border-white/30 text-white font-bold rounded-xl px-4 h-10 min-w-[200px] focus:ring-2 focus:ring-[#0d6cf2] transition-all">
+                    <SelectValue placeholder="Select Department..." />
+                  </SelectTrigger>
+                  <SelectContent className="bg-slate-900 border border-white/20 text-white rounded-xl shadow-2xl">
+                    {departments.map(dept => (
+                      <SelectItem
+                        key={dept.id}
+                        value={dept.id}
+                        className="hover:bg-white/10 cursor-pointer px-4 py-2 rounded-lg"
+                      >
+                        {dept.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
-              <Select
-                value={selectedDepartment}
-                onValueChange={(value) => setSelectedDepartment(value)}
-              >
-                <SelectTrigger className="w-full sm:w-64 bg-transparent border-none text-white font-bold h-10 focus:ring-0">
-                  <SelectValue placeholder="Network Node..." />
-                </SelectTrigger>
-                <SelectContent className="glass-card border-white/10 text-white">
-                  {departments.map(dept => (
-                    <SelectItem
-                      key={dept.id}
-                      value={String(dept.id)}
-                      className="hover:bg-white/5 cursor-pointer"
-                    >
-                      {dept.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
             </div>
-            {user.role !== 'admin' && user.department && user.department !== selectedDepartment && (
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-[10px] text-[#0d6cf2] font-black uppercase tracking-widest hover:bg-white/5"
-                onClick={() => {
-                  const dept = departments.find(d => d.name === user.department || d.id === user.department);
-                  if (dept) setSelectedDepartment(String(dept.id));
-                }}
-              >
-                Reset to {user.department}
-              </Button>
+
+            {/* Reset to assigned department button for non-admin staff */}
+            {user.role !== 'admin' && user.department && selectedDepartment && (
+              (() => {
+                const assignedDept = departments.find(d => d.name === user.department || d.id === user.department);
+                const isViewingOtherDept = assignedDept && assignedDept.id !== selectedDepartment;
+                return isViewingOtherDept && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-xs text-[#0d6cf2] hover:text-[#0d6cf2]/80 font-semibold uppercase tracking-wider hover:bg-white/5 rounded-xl px-4"
+                    onClick={() => {
+                      if (assignedDept) setSelectedDepartment(assignedDept.id);
+                    }}
+                  >
+                    ← Back to {user.department}
+                  </Button>
+                );
+              })()
             )}
           </div>
         </motion.div>
