@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
@@ -27,8 +27,7 @@ export default function StudentTicketView() {
   const previousStatusRef = useRef(null);
   const notificationShownRef = useRef(false);
   const audioRef = useRef(null);
-  const [countdown, setCountdown] = useState(30);
-  const timerRef = useRef(null);
+
 
   const urlParams = new URLSearchParams(window.location.search);
   const studentNumber = urlParams.get('student');
@@ -124,12 +123,10 @@ export default function StudentTicketView() {
   const activeTicket = myTickets.find(t => t.status === 'waiting' || t.status === 'in_progress' || t.status === 'called');
   const completedTickets = myTickets.filter(t => t.status === 'completed' || t.status === 'cancelled');
 
-  // Effect to manage the 30s countdown timer
+  // Play sound and show browser notification when ticket is called
   useEffect(() => {
     if (activeTicket && (activeTicket.status === 'in_progress' || activeTicket.status === 'called')) {
-      // If the ticket just moved to called/in_progress, start notification/timer
       if (previousStatusRef.current === 'waiting' && !notificationShownRef.current) {
-        setCountdown(30);
         notificationShownRef.current = true;
 
         // Play sound
@@ -147,26 +144,10 @@ export default function StudentTicketView() {
           });
         }
       }
-
-      // Decrement countdown every second
-      const timer = setInterval(() => {
-        setCountdown(prev => Math.max(0, prev - 1));
-      }, 1000);
-
-      return () => clearInterval(timer);
     } else {
-      // Reset if status changes away
       notificationShownRef.current = false;
-      setCountdown(30);
     }
   }, [activeTicket?.status]);
-
-  // Effect to handle auto-cancellation when countdown reaches zero
-  useEffect(() => {
-    if (countdown === 0 && activeTicket && (activeTicket.status === 'in_progress' || activeTicket.status === 'called')) {
-      cancelMutation.mutate(activeTicket.id);
-    }
-  }, [countdown, activeTicket, cancelMutation]);
 
   // Update previous status ref
   useEffect(() => {
@@ -282,13 +263,6 @@ export default function StudentTicketView() {
               </motion.div>
 
               <div className="mt-8 flex flex-col items-center gap-6">
-                <div className="flex items-center gap-4 px-6 py-3 bg-red-500/10 border border-red-500/20 rounded-2xl">
-                  <Clock className="w-5 h-5 text-red-500 animate-pulse" />
-                  <p className="text-sm font-black text-red-400 uppercase tracking-widest">
-                    Auto-abort in {countdown}s
-                  </p>
-                </div>
-
                 <div className="flex flex-col sm:flex-row gap-4 w-full max-w-md">
                   <Button
                     onClick={() => {
@@ -300,16 +274,6 @@ export default function StudentTicketView() {
                   >
                     <XCircle className="w-4 h-4 mr-2" />
                     CANCEL TICKET
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    onClick={() => {
-                      if (timerRef.current) clearInterval(timerRef.current);
-                      navigate(createPageUrl("Home"));
-                    }}
-                    className="flex-1 h-14 text-white/40 hover:text-white hover:bg-white/5 font-black uppercase tracking-widest text-[10px] rounded-2xl transition-all"
-                  >
-                    DISMISS ALARM
                   </Button>
                 </div>
               </div>

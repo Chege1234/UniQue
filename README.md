@@ -8,12 +8,12 @@ A smart digital queue management system for universities, built with **React + V
 
 - 🎟️ **Digital Ticketing** — Students take a numbered ticket and see their live position in the queue
 - 📣 **Real-time Updates** — Queue positions and ticket statuses update instantly via Supabase Realtime
-- ⏱️ **Auto-Cancellation** — Tickets are automatically cancelled with a 30-second countdown if the student doesn't respond when called
 - 🏢 **Multi-Department Support** — Staff can switch between departments from the dashboard
 - 👩‍💼 **Staff Dashboard** — Call next ticket, mark as served, and view serving history
 - 📊 **Analytics** — Admins can view queue metrics and activity reports
 - 🔐 **Role-Based Access** — Separate flows for Students, Staff, and Admins
 - 🛡️ **Rate Limiting & Validation** — Client-side request throttling and form input validation
+- 🔔 **Browser Notifications** — Students receive an audio + browser notification when their ticket is called
 
 ---
 
@@ -129,6 +129,6 @@ The app will be available at `http://localhost:5173`.
 ## 🔧 Key Technical Decisions
 
 - **Supabase Realtime** subscriptions are used in `StudentTicketView.jsx` and `StaffDashboard.jsx` to push database changes to the browser instantly.
-- **Auto-cancellation** is triggered when a ticket reaches `in_progress` status; a 30-second timer starts and cancels the ticket if the student doesn't confirm.
+- **Browser notifications + audio** are triggered when a ticket reaches `in_progress` status, alerting the student to proceed to the counter.
 - **Department switching** in `StaffDashboard.jsx` uses a fully implemented custom `Select` component (`src/Components/ui/select.jsx`).
 - **Rate limiting** (`src/utils/rateLimit.js`) prevents abuse of ticket creation and other actions.
