@@ -3,15 +3,21 @@ import { Card, CardContent } from "@/Components/ui/card";
 import { Badge } from "@/Components/ui/badge";
 import { User, Clock, CheckCircle2, XCircle } from "lucide-react";
 import { format } from "date-fns";
+import { motion } from "framer-motion";
 
 export default function CompletedToday({ tickets }) {
   if (tickets.length === 0) {
     return (
-      <Card className="border-2 border-dashed border-gray-300 bg-gray-50">
-        <CardContent className="p-12 text-center">
-          <CheckCircle2 className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-gray-700 mb-2">No Completed Tickets</h3>
-          <p className="text-gray-600">Tickets you complete will appear here</p>
+      <Card className="glass-card border-none">
+        <CardContent className="p-16 text-center">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            <CheckCircle2 className="w-16 h-16 text-green-300/20 mx-auto mb-4" />
+            <h3 className="text-xl font-black text-white mb-2">No Completed Tickets Yet</h3>
+            <p className="text-blue-100/40 font-medium">Tickets you serve or cancel today will appear here.</p>
+          </motion.div>
         </CardContent>
       </Card>
     );
@@ -44,7 +50,7 @@ export default function CompletedToday({ tickets }) {
                   </div>
                   <div className="flex items-center gap-2">
                     <Clock className="w-4 h-4 text-blue-500/50" />
-                    {(ticket.status === 'cancelled' || ticket.status === 'skipped') ? 'TERMINATED AT' : 'RESOLVED AT'} {ticket.served_at ? format(new Date(ticket.served_at), 'h:mm a') : format(new Date(ticket.updated_at || ticket.created_date), 'h:mm a')}
+                    {(ticket.status === 'cancelled' || ticket.status === 'skipped') ? 'Cancelled at' : 'Completed at'} {ticket.served_at ? format(new Date(ticket.served_at), 'h:mm a') : format(new Date(ticket.updated_at || ticket.created_date), 'h:mm a')}
                   </div>
                 </div>
               </div>

@@ -16,8 +16,8 @@ export default function WaitingQueue({ tickets, onCallNext, isCallingNext }) {
             animate={{ scale: 1, opacity: 1 }}
           >
             <Clock className="w-16 h-16 text-blue-300/20 mx-auto mb-6" />
-            <h3 className="text-xl font-bold text-white mb-2">Node is Idle</h3>
-            <p className="text-blue-100/40 font-medium">No students are currently in the buffer</p>
+            <h3 className="text-xl font-bold text-white mb-2">Queue is Empty</h3>
+            <p className="text-blue-100/40 font-medium">No students are currently waiting.</p>
           </motion.div>
         </CardContent>
       </Card>
@@ -32,14 +32,14 @@ export default function WaitingQueue({ tickets, onCallNext, isCallingNext }) {
             <span className="w-2 h-2 rounded-full bg-purple-500 shadow-[0_0_10px_#a855f7]" />
             Wait List
           </h2>
-          <p className="text-blue-100/30 text-xs font-bold mt-1 uppercase tracking-widest">{tickets.length} Registered Nodes</p>
+          <p className="text-blue-100/30 text-xs font-bold mt-1 uppercase tracking-widest">{tickets.length} student{tickets.length !== 1 ? 's' : ''} waiting</p>
         </div>
         <Button
           onClick={onCallNext}
           disabled={isCallingNext || tickets.length === 0}
           className="bg-white/10 hover:bg-white/20 border border-white/10 text-white font-black uppercase tracking-widest px-8 py-6 rounded-2xl transition-all duration-300 group"
         >
-          {isCallingNext ? "ENGAGING..." : "CALL NEXT"}
+          {isCallingNext ? "Calling..." : "CALL NEXT"}
           {!isCallingNext && <Play className="w-4 h-4 ml-3 group-hover:translate-x-1 transition-transform" />}
         </Button>
       </div>

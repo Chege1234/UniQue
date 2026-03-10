@@ -17,7 +17,7 @@ export default function ServingTicket({ tickets, onComplete, onCancel, isComplet
           >
             <User className="w-20 h-20 text-blue-300/10 mx-auto mb-6" />
             <h3 className="text-2xl font-black text-white mb-2">Ready for Service</h3>
-            <p className="text-blue-100/40 font-medium">Awaiting next engagement from queue</p>
+            <p className="text-blue-100/40 font-medium">Call the next student from the Waiting List.</p>
           </motion.div>
         </CardContent>
       </Card>
@@ -47,7 +47,7 @@ export default function ServingTicket({ tickets, onComplete, onCancel, isComplet
                     </div>
                     <div className="flex items-center gap-2">
                       <Clock className="w-4 h-4 text-blue-500/50" />
-                      INITIATED {format(new Date(ticket.called_at || ticket.created_date), 'h:mm a')}
+                      Called at {format(new Date(ticket.called_at || ticket.created_date), 'h:mm a')}
                     </div>
                   </div>
                 </div>

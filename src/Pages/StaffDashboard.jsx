@@ -244,7 +244,7 @@ export default function StaffDashboard() {
           animate={{ opacity: 1, x: 0 }}
         >
           <h1 className="text-4xl font-extrabold text-white tracking-tight">
-            Staff <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-[#0d6cf2]">Terminal</span>
+            Staff <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-[#0d6cf2]">Counter</span>
           </h1>
           <div className="mt-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
             {user.role === 'admin' && (
@@ -344,12 +344,12 @@ export default function StaffDashboard() {
                 <Badge className="ml-2 bg-[#0d6cf2]/10 text-[#0d6cf2] border-none text-[10px] tabular-nums">{waitingTickets.length}</Badge>
               </TabsTrigger>
               <TabsTrigger value="serving" className="rounded-xl data-[state=active]:bg-[#0d6cf2] data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-blue-900/40 text-xs font-bold tracking-widest uppercase transition-all duration-300">
-                <span className="hidden sm:inline">Live Session</span>
-                <span className="sm:hidden">Session</span>
+                <span className="hidden sm:inline">Now Serving</span>
+                <span className="sm:hidden">Serving</span>
                 <Badge className="ml-2 bg-white/10 text-white border-none text-[10px] tabular-nums">{servingTickets.length}</Badge>
               </TabsTrigger>
               <TabsTrigger value="completed" className="rounded-xl data-[state=active]:bg-green-600/20 data-[state=active]:text-green-400 data-[state=active]:border-green-500/30 text-xs font-bold tracking-widest uppercase transition-all duration-300">
-                <span className="hidden sm:inline">Terminal History</span>
+                <span className="hidden sm:inline">Handled Today</span>
                 <span className="sm:hidden">History</span>
                 <Badge className="ml-2 bg-green-500/10 text-green-400 border-none text-[10px] tabular-nums">{completedToday.length}</Badge>
               </TabsTrigger>

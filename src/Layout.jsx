@@ -21,14 +21,18 @@ export default function Layout({ children, currentPageName }) {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [user, setUser] = React.useState(null);
+  const [userLoading, setUserLoading] = React.useState(true);
 
   React.useEffect(() => {
     const fetchUser = async () => {
+      setUserLoading(true);
       try {
         const currentUser = await base44.auth.me();
         setUser(currentUser);
       } catch (error) {
         setUser(null);
+      } finally {
+        setUserLoading(false);
       }
     };
     fetchUser();
@@ -109,7 +113,16 @@ export default function Layout({ children, currentPageName }) {
 
                 {/* User Menu */}
                 <div className="hidden md:flex items-center gap-6">
-                  {!user ? (
+                  {userLoading ? (
+                    /* Skeleton pill — prevents header jump while fetching */
+                    <div className="flex items-center gap-3 px-4 py-2 bg-white/5 border border-white/5 rounded-2xl animate-pulse">
+                      <div className="w-8 h-8 rounded-lg bg-white/10" />
+                      <div className="hidden lg:flex flex-col gap-1.5">
+                        <div className="w-20 h-2.5 rounded-full bg-white/10" />
+                        <div className="w-12 h-2 rounded-full bg-white/5" />
+                      </div>
+                    </div>
+                  ) : !user ? (
                     <Button
                       onClick={() => navigate(createPageUrl("Login"))}
                       className="bg-primary hover:bg-primary/80 text-white rounded-xl px-8 font-bold uppercase tracking-wider text-xs h-12"
@@ -203,7 +216,7 @@ export default function Layout({ children, currentPageName }) {
                           onClick={handleLogout}
                         >
                           <LogOut className="w-5 h-5 mr-4" />
-                          Terminate Session
+                          Sign Out
                         </Button>
                       </div>
                     )}
@@ -255,7 +268,7 @@ export default function Layout({ children, currentPageName }) {
               </p>
               <div className="flex items-center gap-3 px-4 py-2 bg-white/5 rounded-full border border-white/5">
                 <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_10px_#22c55e]" />
-                <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Global Node Operational</span>
+                <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">All Systems Online</span>
               </div>
             </div>
           </footer>
