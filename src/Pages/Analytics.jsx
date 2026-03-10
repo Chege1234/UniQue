@@ -152,7 +152,7 @@ export default function Analytics() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
         <div>
           <h1 className="text-5xl font-black text-white tracking-tight uppercase">Intelligence <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Engine</span></h1>
-          <p className="text-blue-100/30 font-medium text-lg mt-3 uppercase tracking-widest text-balance">Deep-layer telemetric analysis of network throughput</p>
+          <p className="text-blue-100/30 font-medium text-lg mt-3 uppercase tracking-widest text-balance">Ticket and queue activity across all departments</p>
         </div>
       </div>
 
@@ -187,7 +187,7 @@ export default function Analytics() {
         {/* Weekly Trend */}
         <Card className="glass-card border-none overflow-hidden group">
           <CardHeader className="p-8 border-b border-white/5 bg-white/5">
-            <CardTitle className="text-[10px] font-black text-white uppercase tracking-[0.4em]">Temporal Flux Log</CardTitle>
+            <CardTitle className="text-[10px] font-black text-white uppercase tracking-[0.4em]">Tickets This Week</CardTitle>
           </CardHeader>
           <CardContent className="p-10">
             <div className="h-[350px] w-full">
@@ -216,8 +216,8 @@ export default function Analytics() {
                     contentStyle={{ backgroundColor: '#0B0118', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px', textTransform: 'uppercase', fontSize: '10px', fontWeight: '900' }}
                     itemStyle={{ color: '#fff' }}
                   />
-                  <Line type="monotone" dataKey="tickets" stroke="#3B82F6" strokeWidth={4} dot={{ r: 6, fill: '#3B82F6', strokeWidth: 0 }} activeDot={{ r: 8, strokeWidth: 0 }} name="AGGREGATE" />
-                  <Line type="monotone" dataKey="completed" stroke="#8B5CF6" strokeWidth={4} dot={{ r: 6, fill: '#8B5CF6', strokeWidth: 0 }} activeDot={{ r: 8, strokeWidth: 0 }} name="RESOLVED" />
+                  <Line type="monotone" dataKey="tickets" stroke="#3B82F6" strokeWidth={4} dot={{ r: 6, fill: '#3B82F6', strokeWidth: 0 }} activeDot={{ r: 8, strokeWidth: 0 }} name="Total" />
+                  <Line type="monotone" dataKey="completed" stroke="#8B5CF6" strokeWidth={4} dot={{ r: 6, fill: '#8B5CF6', strokeWidth: 0 }} activeDot={{ r: 8, strokeWidth: 0 }} name="Completed" />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -227,7 +227,7 @@ export default function Analytics() {
         {/* Status Distribution */}
         <Card className="glass-card border-none overflow-hidden group">
           <CardHeader className="p-8 border-b border-white/5 bg-white/5">
-            <CardTitle className="text-[10px] font-black text-white uppercase tracking-[0.4em]">Node State Distribution</CardTitle>
+            <CardTitle className="text-[10px] font-black text-white uppercase tracking-[0.4em]">Ticket Status Breakdown</CardTitle>
           </CardHeader>
           <CardContent className="p-10 flex flex-col items-center">
             <div className="h-[350px] w-full">
@@ -263,7 +263,7 @@ export default function Analytics() {
         {/* Department Performance */}
         <Card className="glass-card border-none overflow-hidden group lg:col-span-2">
           <CardHeader className="p-8 border-b border-white/5 bg-white/5">
-            <CardTitle className="text-[10px] font-black text-white uppercase tracking-[0.4em]">Sector Performance matrix</CardTitle>
+            <CardTitle className="text-[10px] font-black text-white uppercase tracking-[0.4em]">Department Performance</CardTitle>
           </CardHeader>
           <CardContent className="p-10">
             <div className="h-[400px] w-full">
@@ -291,8 +291,8 @@ export default function Analytics() {
                   <Tooltip
                     contentStyle={{ backgroundColor: '#0B0118', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px', textTransform: 'uppercase', fontSize: '10px', fontWeight: '900' }}
                   />
-                  <Bar dataKey="tickets" fill="url(#barGradient)" radius={[8, 8, 0, 0]} name="TOTAL TRANSMISSIONS" />
-                  <Bar dataKey="completed" fill="#8B5CF6" radius={[8, 8, 0, 0]} name="RESOLVED" />
+                  <Bar dataKey="tickets" fill="url(#barGradient)" radius={[8, 8, 0, 0]} name="Total" />
+                  <Bar dataKey="completed" fill="#8B5CF6" radius={[8, 8, 0, 0]} name="Completed" />
                 </BarChart>
               </ResponsiveContainer>
             </div>

@@ -248,14 +248,14 @@ export default function Layout({ children, currentPageName }) {
                 <div className="space-y-4 text-center md:text-left">
                   <h4 className="text-[10px] font-black text-white uppercase tracking-[0.3em]">System</h4>
                   <nav className="flex flex-col gap-3">
-                    <Link to="#" className="text-slate-500 hover:text-white text-[10px] font-bold uppercase tracking-widest transition-colors">Operational Status</Link>
+                    <Link to="#" className="text-slate-500 hover:text-white text-[10px] font-bold uppercase tracking-widest transition-colors">System Status</Link>
                     <Link to="#" className="text-slate-500 hover:text-white text-[10px] font-bold uppercase tracking-widest transition-colors">Documentation</Link>
                   </nav>
                 </div>
                 <div className="space-y-4 text-center md:text-left">
                   <h4 className="text-[10px] font-black text-white uppercase tracking-[0.3em]">Privacy</h4>
                   <nav className="flex flex-col gap-3">
-                    <Link to="#" className="text-slate-500 hover:text-white text-[10px] font-bold uppercase tracking-widest transition-colors">Data Protocol</Link>
+                    <Link to="#" className="text-slate-500 hover:text-white text-[10px] font-bold uppercase tracking-widest transition-colors">Privacy Policy</Link>
                     <Link to="#" className="text-slate-500 hover:text-white text-[10px] font-bold uppercase tracking-widest transition-colors">Terms of Use</Link>
                   </nav>
                 </div>

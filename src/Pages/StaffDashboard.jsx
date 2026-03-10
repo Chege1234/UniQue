@@ -249,7 +249,7 @@ export default function StaffDashboard() {
           <div className="mt-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
             {user.role === 'admin' && (
               <Badge className="bg-[#0d6cf2]/20 text-[#0d6cf2] border border-[#0d6cf2]/30 text-xs font-bold uppercase tracking-widest px-3 py-1 backdrop-blur-md">
-                👑 Authority Override
+                👑 Admin Override
               </Badge>
             )}
 

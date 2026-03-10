@@ -46,7 +46,7 @@ export default function StudentEntry() {
             className="text-blue-100/40 hover:text-white hover:bg-white/5 font-black uppercase tracking-[0.3em] text-[10px] rounded-2xl px-6 h-12 transition-all group"
           >
             <ArrowLeft className="w-4 h-4 mr-3 group-hover:-translate-x-2 transition-transform" />
-            ABORT MISSION
+            Go Back
           </Button>
         </div>
 
@@ -59,15 +59,15 @@ export default function StudentEntry() {
               <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-blue-500/20 group-hover:rotate-12 transition-transform duration-500">
                 <Hash className="w-10 h-10 text-white" />
               </div>
-              <CardTitle className="text-4xl font-black text-white tracking-tight uppercase">Access <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Terminal</span></CardTitle>
+              <CardTitle className="text-4xl font-black text-white tracking-tight uppercase">Check <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">In</span></CardTitle>
               <CardDescription className="text-blue-100/30 font-medium text-lg mt-3">
-                Enter your 8-digit identification key to engage.
+                Enter your 8-digit student number to get started.
               </CardDescription>
             </CardHeader>
             <CardContent className="p-12 space-y-12">
               <form onSubmit={handleSubmit} className="space-y-8">
                 <div className="space-y-4">
-                  <Label htmlFor="studentNumber" className="text-[10px] font-black text-blue-400 uppercase tracking-[0.3em] ml-1">IDENTIFICATION KEY</Label>
+                  <Label htmlFor="studentNumber" className="text-[10px] font-black text-blue-400 uppercase tracking-[0.3em] ml-1">STUDENT NUMBER</Label>
                   <Input
                     id="studentNumber"
                     type="text"
@@ -91,7 +91,7 @@ export default function StudentEntry() {
                   className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 h-20 text-white font-black uppercase tracking-[0.4em] text-sm rounded-3xl shadow-2xl shadow-blue-500/20 transition-all active:scale-[0.98]"
                   disabled={studentNumber.length !== 8}
                 >
-                  INITIALIZE SESSION
+                  GET A TICKET
                   <ArrowRight className="ml-4 w-6 h-6 group-hover:translate-x-2 transition-transform" />
                 </Button>
               </form>
@@ -101,7 +101,7 @@ export default function StudentEntry() {
                   <div className="w-full border-t border-white/5"></div>
                 </div>
                 <div className="relative flex justify-center">
-                  <span className="px-6 bg-[#0B0118] text-blue-100/20 text-[10px] font-black uppercase tracking-[0.5em]">OPERATOR B</span>
+                  <span className="px-6 bg-[#0B0118] text-blue-100/20 text-[10px] font-black uppercase tracking-[0.5em]">OR</span>
                 </div>
               </div>
 
@@ -113,14 +113,14 @@ export default function StudentEntry() {
                   disabled={studentNumber.length !== 8}
                 >
                   <Search className="mr-3 w-4 h-4" />
-                  QUERY STATUS
+                  CHECK MY TICKET
                 </Button>
               </div>
 
               <div className="bg-blue-500/5 border border-blue-500/10 rounded-3xl p-6">
-                <p className="text-[10px] text-blue-400 font-bold uppercase tracking-widest leading-relaxed text-center">
-                  <span className="text-blue-200">CONSTRAINT:</span> ACTIVE SESSION LIMIT = 1. TERMINATE EXISTING CYCLES BEFORE NEW INITIATION.
-                </p>
+                  <p className="text-[10px] text-blue-400 font-bold uppercase tracking-widest leading-relaxed text-center">
+                    <span className="text-blue-200">NOTE:</span> You can only hold one active ticket at a time. Cancel your current ticket before getting a new one.
+                  </p>
               </div>
             </CardContent>
           </Card>

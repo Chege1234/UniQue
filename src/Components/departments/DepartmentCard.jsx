@@ -35,13 +35,13 @@ export default function DepartmentCard({ department, stats, onSelect, delay = 0 
             </div>
             <div className="flex flex-col items-center justify-center p-4 bg-white/5 rounded-2xl border border-white/5 group-hover:border-blue-500/20 transition-colors">
               <Clock className="w-5 h-5 text-blue-500 mb-2 opacity-50" />
-              <span className="text-[10px] font-black text-blue-100/20 uppercase tracking-widest mb-1">Latency</span>
+              <span className="text-[10px] font-black text-blue-100/20 uppercase tracking-widest mb-1">Est. wait</span>
               <span className="text-xl font-black text-white">{stats.estimatedWait}<span className="text-xs ml-0.5 text-blue-100/30">m</span></span>
             </div>
           </div>
 
           <Button className="w-full h-14 bg-white/5 hover:bg-purple-600 text-white border border-white/10 hover:border-none font-black uppercase tracking-[0.3em] text-[10px] rounded-2xl transition-all active:scale-[0.98]">
-            ENGAGE
+            SELECT DEPARTMENT
             <ArrowRight className="w-4 h-4 ml-3 group-hover:translate-x-2 transition-transform" />
           </Button>
         </CardContent>

@@ -72,7 +72,7 @@ export default function RoleSelection() {
                             <User className="h-10 w-10 text-white" />
                         </div>
                         <CardTitle className="text-4xl font-black text-white tracking-tight">Access <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">Granted</span></CardTitle>
-                        <CardDescription className="text-blue-100/40 font-medium text-lg mt-2">Welcome back, {user.full_name}. Initialize your session parameters.</CardDescription>
+                        <CardDescription className="text-blue-100/40 font-medium text-lg mt-2">Welcome back, {user.full_name}. Please choose your role to continue.</CardDescription>
                     </CardHeader>
                     <CardContent className="p-10 space-y-10">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -82,7 +82,7 @@ export default function RoleSelection() {
                             >
                                 <CardContent className="flex flex-col items-center justify-center p-8 relative z-10">
                                     <GraduationCap className={`h-12 w-12 mb-4 transition-colors duration-300 ${selectedRole === 'student' ? 'text-purple-400' : 'text-blue-100/20'}`} />
-                                    <p className={`font-black uppercase tracking-[0.2em] text-xs ${selectedRole === 'student' ? 'text-white' : 'text-blue-100/40'}`}>Student Node</p>
+                                    <p className={`font-black uppercase tracking-[0.2em] text-xs ${selectedRole === 'student' ? 'text-white' : 'text-blue-100/40'}`}>Student</p>
                                 </CardContent>
                                 {selectedRole === 'student' && <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent animate-pulse" />}
                             </Card>
@@ -92,7 +92,7 @@ export default function RoleSelection() {
                             >
                                 <CardContent className="flex flex-col items-center justify-center p-8 relative z-10">
                                     <Briefcase className={`h-12 w-12 mb-4 transition-colors duration-300 ${selectedRole === 'staff' ? 'text-blue-400' : 'text-blue-100/20'}`} />
-                                    <p className={`font-black uppercase tracking-[0.2em] text-xs ${selectedRole === 'staff' ? 'text-white' : 'text-blue-100/40'}`}>Staff Terminal</p>
+                                    <p className={`font-black uppercase tracking-[0.2em] text-xs ${selectedRole === 'staff' ? 'text-white' : 'text-blue-100/40'}`}>Staff</p>
                                 </CardContent>
                                 {selectedRole === 'staff' && <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent animate-pulse" />}
                             </Card>
@@ -100,10 +100,10 @@ export default function RoleSelection() {
 
                         {selectedRole === 'student' && (
                             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
-                                <Label htmlFor="studentId" className="text-[10px] font-black text-purple-400 uppercase tracking-[0.25em] ml-1">Identification Key</Label>
+                                <Label htmlFor="studentId" className="text-[10px] font-black text-purple-400 uppercase tracking-[0.25em] ml-1">Student Number</Label>
                                 <Input
                                     id="studentId"
-                                    placeholder="Enter 8-digit identification..."
+                                    placeholder="Enter your 8-digit student number..."
                                     value={studentId}
                                     onChange={(e) => setStudentId(e.target.value)}
                                     className="h-14 bg-white/5 border-white/10 text-white placeholder:text-white/10 rounded-2xl focus:ring-purple-500/50 focus:border-purple-500/50 text-lg font-bold tracking-widest"
@@ -116,7 +116,7 @@ export default function RoleSelection() {
                                 <Label htmlFor="department" className="text-[10px] font-black text-blue-400 uppercase tracking-[0.25em] ml-1">Assigned Department</Label>
                                 <Select onValueChange={setStaffDepartment} value={staffDepartment}>
                                     <SelectTrigger className="h-14 bg-white/5 border-white/10 text-white rounded-2xl focus:ring-blue-500/50 focus:border-blue-500/50 text-lg font-bold">
-                                        <SelectValue placeholder="Select network node..." />
+                                        <SelectValue placeholder="Select your department..." />
                                     </SelectTrigger>
                                     <SelectContent className="glass-card border-white/10 text-white">
                                         {departments.map(dept => (
@@ -132,7 +132,7 @@ export default function RoleSelection() {
                             disabled={!selectedRole || (selectedRole === 'student' && !studentId) || (selectedRole === 'staff' && !staffDepartment) || updateUserMutation.isPending}
                             className="w-full h-16 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-black uppercase tracking-[0.3em] text-sm rounded-2xl shadow-2xl shadow-purple-500/20 transition-all active:scale-[0.98]"
                         >
-                            {updateUserMutation.isPending ? <Loader2 className="h-5 w-5 animate-spin mr-3" /> : 'INITIALIZE SESSION'}
+                            {updateUserMutation.isPending ? <Loader2 className="h-5 w-5 animate-spin mr-3" /> : 'CONTINUE'}
                         </Button>
                     </CardContent>
                 </Card>

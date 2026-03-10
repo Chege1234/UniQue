@@ -144,7 +144,7 @@ export default function StaffLogin() {
                     onClick={() => base44.auth.logout()}
                     className="flex-1 h-16 text-blue-100/30 hover:text-white hover:bg-white/5 font-black uppercase tracking-[0.3em] text-[10px] rounded-2xl transition-all"
                   >
-                    TERMINATE SESSION
+                    SIGN OUT
                   </Button>
                 </div>
               )}
@@ -167,9 +167,9 @@ export default function StaffLogin() {
             <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-blue-400 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-blue-500/20 group-hover:scale-110 transition-transform duration-500">
               <Shield className="w-10 h-10 text-white" />
             </div>
-            <CardTitle className="text-4xl font-black text-white tracking-tight uppercase">Staff <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-200">Terminal</span></CardTitle>
+            <CardTitle className="text-4xl font-black text-white tracking-tight uppercase">Staff <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-200">Login</span></CardTitle>
             <CardDescription className="text-blue-100/30 font-medium text-lg mt-3">
-              Authentication required for administrative uplink.
+              Sign in to manage your department's queue.
             </CardDescription>
           </CardHeader>
           <CardContent className="p-12 space-y-12">
@@ -186,7 +186,7 @@ export default function StaffLogin() {
                 <div className="w-full border-t border-white/5"></div>
               </div>
               <div className="relative flex justify-center">
-                <span className="px-6 bg-[#0B0118] text-blue-100/20 text-[10px] font-black uppercase tracking-[0.5em]">OR INITIALIZE REQUEST</span>
+                  <span className="px-6 bg-[#0B0118] text-blue-100/20 text-[10px] font-black uppercase tracking-[0.5em]">OR REQUEST ACCESS</span>
               </div>
             </div>
 
@@ -195,19 +195,19 @@ export default function StaffLogin() {
               onClick={handleRequestAccess}
               className="w-full h-16 bg-white/5 border-white/10 hover:bg-white/10 text-white font-black uppercase tracking-[0.3em] text-[10px] rounded-2xl transition-all"
             >
-              REQUEST ACCESS PROTOCOL
+              REQUEST STAFF ACCESS
             </Button>
 
             <div className="bg-blue-500/5 border border-blue-500/10 rounded-3xl p-8">
-              <p className="text-[10px] text-blue-400 font-black uppercase tracking-widest mb-4">
-                Onboarding Protocol:
-              </p>
+                <p className="text-[10px] text-blue-400 font-black uppercase tracking-widest mb-4">
+                  How to get access:
+                </p>
               <ol className="text-[10px] text-blue-100/30 font-bold uppercase tracking-[0.15em] space-y-3">
-                <li className="flex items-center gap-3"><span className="w-5 h-5 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">1</span> Request administrative clearance</li>
-                <li className="flex items-center gap-3"><span className="w-5 h-5 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">2</span> Await Superuser validation</li>
-                <li className="flex items-center gap-3"><span className="w-5 h-5 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">3</span> Obtain unique invitation vector</li>
-                <li className="flex items-center gap-3"><span className="w-5 h-5 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">4</span> Configure node with verified ID</li>
-                <li className="flex items-center gap-3"><span className="w-5 h-5 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">5</span> Engage terminal uplink</li>
+                <li className="flex items-center gap-3"><span className="w-5 h-5 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">1</span> Request staff access online</li>
+                <li className="flex items-center gap-3"><span className="w-5 h-5 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">2</span> Wait for admin approval</li>
+                <li className="flex items-center gap-3"><span className="w-5 h-5 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">3</span> Receive your invitation email</li>
+                <li className="flex items-center gap-3"><span className="w-5 h-5 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">4</span> Sign in with your verified email</li>
+                <li className="flex items-center gap-3"><span className="w-5 h-5 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">5</span> Your dashboard will be ready</li>
               </ol>
             </div>
           </CardContent>

@@ -129,7 +129,7 @@ export default function AdminDashboard() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
         <div>
           <h1 className="text-5xl font-black text-white tracking-tight uppercase">Central <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Command</span></h1>
-          <p className="text-blue-100/30 font-medium text-lg mt-3 uppercase tracking-widest">System architecture and performance monitoring</p>
+          <p className="text-blue-100/30 font-medium text-lg mt-3 uppercase tracking-widest">Admin panel for departments, staff, and system insights</p>
         </div>
         <div className="flex gap-4">
           <Button
@@ -145,7 +145,7 @@ export default function AdminDashboard() {
             className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-black uppercase tracking-[0.3em] text-[10px] rounded-2xl px-8 h-14 shadow-2xl shadow-purple-900/40 transition-all"
           >
             <BarChart3 className="w-4 h-4 mr-3" />
-            ANALYTICS ENGINE
+            ANALYTICS
           </Button>
         </div>
       </div>
@@ -192,20 +192,20 @@ export default function AdminDashboard() {
 
         {/* Department Management */}
         <div className="space-y-6">
-          <h2 className="text-[10px] font-black text-blue-400 uppercase tracking-[0.4em] ml-1">Node Configuration</h2>
+          <h2 className="text-[10px] font-black text-blue-400 uppercase tracking-[0.4em] ml-1">Department Setup</h2>
           <DepartmentManager departments={departments} />
         </div>
 
         {/* System Stats */}
         <div className="space-y-6">
-          <h2 className="text-[10px] font-black text-blue-400 uppercase tracking-[0.4em] ml-1">Telemetric insights</h2>
+          <h2 className="text-[10px] font-black text-blue-400 uppercase tracking-[0.4em] ml-1">System Stats</h2>
           <SystemStats tickets={allTickets} departments={departments} />
         </div>
 
         {/* All Staff Requests - Collapsible / History */}
         {staffRequests.length > 0 && pendingRequests.length === 0 && (
           <div className="space-y-6 opacity-60 hover:opacity-100 transition-opacity">
-            <h2 className="text-[10px] font-black text-blue-100/30 uppercase tracking-[0.4em] ml-1">Clearance Logs</h2>
+            <h2 className="text-[10px] font-black text-blue-100/30 uppercase tracking-[0.4em] ml-1">Access History</h2>
             <StaffRequestManager requests={staffRequests} />
           </div>
         )}
