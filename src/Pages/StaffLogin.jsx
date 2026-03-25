@@ -203,11 +203,10 @@ export default function StaffLogin() {
                   How to get access:
                 </p>
               <ol className="text-[10px] text-blue-100/30 font-bold uppercase tracking-[0.15em] space-y-3">
-                <li className="flex items-center gap-3"><span className="w-5 h-5 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">1</span> Request staff access online</li>
+                <li className="flex items-center gap-3"><span className="w-5 h-5 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">1</span> Request staff access &amp; set a password</li>
                 <li className="flex items-center gap-3"><span className="w-5 h-5 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">2</span> Wait for admin approval</li>
-                <li className="flex items-center gap-3"><span className="w-5 h-5 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">3</span> Receive your invitation email</li>
-                <li className="flex items-center gap-3"><span className="w-5 h-5 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">4</span> Sign in with your verified email</li>
-                <li className="flex items-center gap-3"><span className="w-5 h-5 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">5</span> Your dashboard will be ready</li>
+                <li className="flex items-center gap-3"><span className="w-5 h-5 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">3</span> Once approved, come back here</li>
+                <li className="flex items-center gap-3"><span className="w-5 h-5 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">4</span> Sign in with your email &amp; password</li>
               </ol>
             </div>
           </CardContent>

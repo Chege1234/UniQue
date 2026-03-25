@@ -2,9 +2,11 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
 import { Badge } from "@/Components/ui/badge";
+import { Alert, AlertDescription } from "@/Components/ui/alert";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
-import { CheckCircle2, XCircle, Mail, Phone, Clock, User } from "lucide-react";
+import { supabase } from "@/api/supabaseClient";
+import { CheckCircle2, XCircle, Mail, Phone, Clock, User, AlertCircle } from "lucide-react";
 import { format } from "date-fns";
 import {
   Dialog,
@@ -19,9 +21,30 @@ export default function StaffRequestManager({ requests }) {
   const queryClient = useQueryClient();
   const [selectedRequest, setSelectedRequest] = React.useState(null);
   const [actionType, setActionType] = React.useState(null);
+  const [approveError, setApproveError] = React.useState('');
 
-  const updateRequestMutation = useMutation({
-    mutationFn: ({ id, status }) => base44.entities.StaffRequest.update(id, { status }),
+  const approveMutation = useMutation({
+    mutationFn: async (requestId) => {
+      const { data, error } = await supabase.functions.invoke('approve-staff', {
+        body: { request_id: requestId },
+      });
+      if (error) throw new Error(error.message || 'Edge function error');
+      if (data?.error) throw new Error(data.error);
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['staffRequests']);
+      setSelectedRequest(null);
+      setActionType(null);
+      setApproveError('');
+    },
+    onError: (err) => {
+      setApproveError(err.message || 'Failed to approve request. Please try again.');
+    }
+  });
+
+  const rejectMutation = useMutation({
+    mutationFn: ({ id }) => base44.entities.StaffRequest.update(id, { status: 'rejected' }),
     onSuccess: () => {
       queryClient.invalidateQueries(['staffRequests']);
       setSelectedRequest(null);
@@ -32,21 +55,25 @@ export default function StaffRequestManager({ requests }) {
   const handleApprove = (request) => {
     setSelectedRequest(request);
     setActionType('approve');
+    setApproveError('');
   };
 
   const handleReject = (request) => {
     setSelectedRequest(request);
     setActionType('reject');
+    setApproveError('');
   };
 
   const confirmAction = () => {
-    if (selectedRequest && actionType) {
-      updateRequestMutation.mutate({
-        id: selectedRequest.id,
-        status: actionType === 'approve' ? 'approved' : 'rejected'
-      });
+    if (!selectedRequest || !actionType) return;
+    if (actionType === 'approve') {
+      approveMutation.mutate(selectedRequest.id);
+    } else {
+      rejectMutation.mutate({ id: selectedRequest.id });
     }
   };
+
+  const isPending = approveMutation.isPending || rejectMutation.isPending;
 
   const pendingRequests = requests.filter(r => r.status === 'pending');
   const processedRequests = requests.filter(r => r.status !== 'pending');
@@ -160,7 +187,7 @@ export default function StaffRequestManager({ requests }) {
             </DialogTitle>
             <DialogDescription>
               {actionType === 'approve'
-                ? 'Are you sure you want to approve this staff access request? You will need to manually invite the user via Dashboard → Users → Invite User.'
+                ? "This will approve the request and automatically update the user's role to Staff. They will be able to log in and access the Staff Dashboard immediately."
                 : 'Are you sure you want to reject this staff access request?'}
             </DialogDescription>
           </DialogHeader>
@@ -173,17 +200,25 @@ export default function StaffRequestManager({ requests }) {
               </div>
             </div>
           )}
+          {approveError && (
+            <Alert className="border-red-500/30 bg-red-500/10 mb-2">
+              <AlertCircle className="h-4 w-4 text-red-400" />
+              <AlertDescription className="text-red-400 text-xs font-semibold ml-2">
+                {approveError}
+              </AlertDescription>
+            </Alert>
+          )}
           <DialogFooter>
-            <Button variant="outline" onClick={() => setSelectedRequest(null)}>
+            <Button variant="outline" onClick={() => { setSelectedRequest(null); setApproveError(''); }}>
               Cancel
             </Button>
             <Button
               onClick={confirmAction}
               className={actionType === 'approve' ? 'bg-green-500 hover:bg-green-600' : ''}
               variant={actionType === 'reject' ? 'destructive' : 'default'}
-              disabled={updateRequestMutation.isPending}
+              disabled={isPending}
             >
-              {updateRequestMutation.isPending ? 'Processing...' : `Confirm ${actionType === 'approve' ? 'Approval' : 'Rejection'}`}
+              {isPending ? 'Processing...' : `Confirm ${actionType === 'approve' ? 'Approval' : 'Rejection'}`}
             </Button>
           </DialogFooter>
         </DialogContent>

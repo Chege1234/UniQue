@@ -10,7 +10,7 @@ import { Label } from "@/Components/ui/label";
 import { Textarea } from "@/Components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
 import { Alert, AlertDescription } from "@/Components/ui/alert";
-import { CheckCircle2, UserPlus, ArrowLeft, Loader2 } from "lucide-react";
+import { CheckCircle2, UserPlus, ArrowLeft, Loader2, Eye, EyeOff, Lock } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
@@ -21,14 +21,21 @@ export default function RequestStaffAccess() {
     email: '',
     phone: '',
     department: '',
-    notes: ''
+    notes: '',
+    password: '',
+    confirm_password: ''
   });
   const [showSuccess, setShowSuccess] = useState(false);
+  const [passwordError, setPasswordError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const createRequestMutation = useMutation({
     mutationFn: async (data) => {
+      const { password, confirm_password, ...rest } = data;
       return base44.entities.StaffRequest.create({
-        ...data,
+        ...rest,
+        password_hash: password,
         status: 'pending'
       });
     },
@@ -39,6 +46,15 @@ export default function RequestStaffAccess() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setPasswordError('');
+    if (formData.password.length < 8) {
+      setPasswordError('Password must be at least 8 characters.');
+      return;
+    }
+    if (formData.password !== formData.confirm_password) {
+      setPasswordError('Passwords do not match.');
+      return;
+    }
     createRequestMutation.mutate(formData);
   };
 
@@ -185,9 +201,73 @@ export default function RequestStaffAccess() {
                     value={formData.notes}
                     onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                     placeholder="Any additional information..."
-                    rows={4}
+                    rows={3}
                     className="bg-white/5 border-white/10 text-white placeholder:text-white/10 rounded-2xl focus:ring-blue-500/50 focus:border-blue-500/50 text-base font-medium p-6"
                   />
+                </div>
+
+                {/* Password section */}
+                <div className="border-t border-white/5 pt-8">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-8 h-8 bg-purple-500/10 border border-purple-500/20 rounded-xl flex items-center justify-center">
+                      <Lock className="w-4 h-4 text-purple-400" />
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-black text-purple-400 uppercase tracking-[0.25em]">Set Your Login Password</p>
+                      <p className="text-[10px] text-blue-100/30 font-medium mt-0.5">You'll use this to sign in once approved. Min. 8 characters.</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-3">
+                      <Label htmlFor="password" className="text-[10px] font-black text-blue-400 uppercase tracking-[0.25em] ml-1">PASSWORD</Label>
+                      <div className="relative">
+                        <Input
+                          id="password"
+                          type={showPassword ? 'text' : 'password'}
+                          value={formData.password}
+                          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                          required
+                          placeholder="Min. 8 characters"
+                          className="h-14 bg-white/5 border-white/10 text-white placeholder:text-white/10 rounded-2xl focus:ring-blue-500/50 focus:border-blue-500/50 text-lg font-bold pr-14"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-100/30 hover:text-white transition-colors"
+                        >
+                          {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                        </button>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <Label htmlFor="confirm_password" className="text-[10px] font-black text-blue-400 uppercase tracking-[0.25em] ml-1">CONFIRM PASSWORD</Label>
+                      <div className="relative">
+                        <Input
+                          id="confirm_password"
+                          type={showConfirmPassword ? 'text' : 'password'}
+                          value={formData.confirm_password}
+                          onChange={(e) => setFormData({ ...formData, confirm_password: e.target.value })}
+                          required
+                          placeholder="Repeat password"
+                          className="h-14 bg-white/5 border-white/10 text-white placeholder:text-white/10 rounded-2xl focus:ring-blue-500/50 focus:border-blue-500/50 text-lg font-bold pr-14"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-100/30 hover:text-white transition-colors"
+                        >
+                          {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  {passwordError && (
+                    <Alert className="mt-4 border-red-500/20 bg-red-500/5">
+                      <AlertDescription className="text-red-400 text-xs font-bold uppercase tracking-widest">
+                        {passwordError}
+                      </AlertDescription>
+                    </Alert>
+                  )}
                 </div>
 
                 <Button

@@ -51,6 +51,7 @@ export default function App() {
                         <Routes>
                             <Route path="/" element={<Layout currentPageName="Home"><Home /></Layout>} />
                             <Route path="/admin" element={<Layout currentPageName="AdminDashboard"><AdminDashboard /></Layout>} />
+                            <Route path="/admin-dashboard" element={<Layout currentPageName="AdminDashboard"><AdminDashboard /></Layout>} />
                             <Route path="/analytics" element={<Layout currentPageName="Analytics"><Analytics /></Layout>} />
                             <Route path="/request-staff-access" element={<Layout currentPageName="RequestStaffAccess"><RequestStaffAccess /></Layout>} />
                             <Route path="/role-selection" element={<Layout currentPageName="RoleSelection"><RoleSelection /></Layout>} />
