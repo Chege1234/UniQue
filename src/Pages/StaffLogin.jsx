@@ -15,18 +15,22 @@ export default function StaffLogin() {
   const [debugInfo, setDebugInfo] = React.useState("");
 
   useEffect(() => {
+    let cancelled = false;
+
     const checkAuthAndConfigure = async () => {
       try {
         const authenticated = await base44.auth.isAuthenticated();
 
         if (!authenticated) {
-          setIsLoading(false);
+          if (!cancelled) setIsLoading(false);
           return;
         }
 
         const currentUser = await base44.auth.me();
 
-        // Admin users go straight to admin dashboard (but can access staff dashboard from there)
+        if (cancelled) return;
+
+        // Admin users go straight to admin dashboard
         if (currentUser.role === 'admin') {
           navigate(createPageUrl("AdminDashboard"));
           return;
@@ -44,8 +48,8 @@ export default function StaffLogin() {
         setDebugInfo(`Looking for approved request with email: ${currentUser.email}`);
 
         try {
-          // Get ALL staff requests and filter manually to avoid case sensitivity issues
           const allRequests = await base44.entities.StaffRequest.list();
+          if (cancelled) return;
           setDebugInfo(prev => prev + `\n\nFound ${allRequests.length} total requests`);
 
           const approvedRequest = allRequests.find(r =>
@@ -57,7 +61,6 @@ export default function StaffLogin() {
             setDebugInfo(prev => prev + `\n\nFound approved request for ${approvedRequest.email}, department: ${approvedRequest.department}`);
             setConfigMessage("Configuring your staff account...");
 
-            // Update user with department
             await base44.auth.updateMe({
               department: approvedRequest.department,
               phone: approvedRequest.phone || ""
@@ -67,8 +70,6 @@ export default function StaffLogin() {
             setDebugInfo(prev => prev + "\n\nUpdate successful!");
 
             await new Promise(resolve => setTimeout(resolve, 1500));
-
-            // Hard reload to ensure user data is refreshed
             window.location.href = createPageUrl("StaffDashboard");
           } else {
             setConfigMessage("No approved staff request found");
@@ -76,28 +77,32 @@ export default function StaffLogin() {
             setIsConfiguring(false);
           }
         } catch (error) {
-          setConfigMessage("Error: " + error.message);
-          setDebugInfo(prev => prev + "\n\nError: " + error.message);
-          setIsConfiguring(false);
+          if (!cancelled) {
+            setConfigMessage("Error: " + error.message);
+            setDebugInfo(prev => prev + "\n\nError: " + error.message);
+            setIsConfiguring(false);
+          }
         }
       } catch (error) {
         console.error("Auth check error:", error);
-        setConfigMessage("Connection error. Please refresh.");
+        if (!cancelled) setConfigMessage("Connection error. Please refresh.");
       } finally {
-        setIsLoading(false);
+        if (!cancelled) setIsLoading(false);
       }
     };
 
     const timeoutId = setTimeout(() => {
-      if (isLoading) {
-        setIsLoading(false);
-        setConfigMessage("Request timed out. Please check your connection.");
-      }
-    }, 10000);
+      setIsLoading(false);
+      setConfigMessage("Request timed out. Please check your connection.");
+    }, 15000);
 
     checkAuthAndConfigure();
-    return () => clearTimeout(timeoutId);
-  }, [navigate, isLoading]);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timeoutId);
+    };
+  }, [navigate]);
 
   const handleLogin = () => {
     base44.auth.redirectToLogin(createPageUrl("StaffLogin"));
