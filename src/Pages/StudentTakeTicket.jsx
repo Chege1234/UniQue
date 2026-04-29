@@ -13,8 +13,10 @@ import {
   Users,
   CheckCircle,
   Loader2,
-  AlertCircle
+  AlertCircle,
+  RefreshCw
 } from "lucide-react";
+import { toast } from "sonner";
 import { motion } from "framer-motion";
 
 import DepartmentCard from "../Components/departments/DepartmentCard";
@@ -86,6 +88,10 @@ export default function StudentTakeTicket() {
       queryClient.invalidateQueries(['myTickets']);
       queryClient.invalidateQueries(['allTickets']);
       navigate(createPageUrl("StudentTicketView") + `?student=${studentNumber}`);
+    },
+    onError: (error) => {
+      console.error('Failed to create ticket:', error);
+      toast.error('Failed to create ticket. Please try again.');
     }
   });
 

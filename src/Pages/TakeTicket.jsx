@@ -16,6 +16,7 @@ import {
   LayoutDashboard // Add this
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 
 import DepartmentCard from "../Components/departments/DepartmentCard";
 import ActiveTicketCard from "../Components/student/ActiveTicketCard"; // Add this
@@ -106,6 +107,10 @@ export default function TakeTicket() {
       queryClient.invalidateQueries(['myTickets']);
       queryClient.invalidateQueries(['allTickets']);
       navigate(createPageUrl("StudentDashboard"));
+    },
+    onError: (error) => {
+      console.error('Failed to create ticket:', error);
+      toast.error('Failed to create ticket. Please try again.');
     }
   });
 

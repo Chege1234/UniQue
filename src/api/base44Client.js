@@ -92,7 +92,12 @@ export const base44 = {
             },
             create: async (payload) => {
                 const { data, error } = await supabase.from('queue_tickets').insert([payload]).select().single();
-                if (error) throw error;
+                if (error) {
+                    // If insert succeeded but select failed (e.g. RLS blocks read-back),
+                    // check if it's a read error vs an actual insert failure
+                    console.error('Ticket create error:', error);
+                    throw error;
+                }
                 return data;
             },
             update: async (id, payload) => {
