@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
+import { supabase } from "@/api/supabaseClient";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -38,8 +39,29 @@ export default function RequestStaffAccess() {
   const createRequestMutation = useMutation({
     mutationFn: async (data) => {
       const { password, confirm_password, ...rest } = data;
-      // We are dropping the password since the staff_requests table doesn't have a column for it.
-      // (The admin will create the account separately).
+      
+      // 1. Sign up the user so their password is set in auth.users
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+          data: {
+            full_name: data.full_name,
+            department: data.department,
+            phone: data.phone || null
+          }
+        }
+      });
+      
+      // If there's an error (other than "User already registered"), throw it.
+      if (authError && !authError.message.includes('already registered')) {
+        throw authError;
+      }
+
+      // 2. Sign out immediately so they aren't logged in as an unapproved user
+      await supabase.auth.signOut();
+
+      // 3. Create the staff request for admins to approve
       return base44.entities.StaffRequest.create({
         ...rest,
         phone: rest.phone || null,
