@@ -132,12 +132,25 @@ export default function StudentTicketView() {
         }
 
         if ('Notification' in window && Notification.permission === 'granted') {
-          new Notification('🎉 It\'s Your Turn!', {
+          const title = '🎉 It\'s Your Turn!';
+          const options = {
             body: `Ticket ${activeTicket.ticket_number} — Please proceed to the ${activeTicket.department_name} counter now!`,
             icon: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=192&h=192&fit=crop',
             tag: 'queue-notification',
             requireInteraction: true
-          });
+          };
+
+          try {
+            // Try standard constructor first
+            new Notification(title, options);
+          } catch (e) {
+            // Fallback to service worker (required for mobile Chrome)
+            if (navigator.serviceWorker) {
+              navigator.serviceWorker.ready.then(registration => {
+                registration.showNotification(title, options);
+              }).catch(err => console.error('Notification fallback failed:', err));
+            }
+          }
         }
       }
     } else {
